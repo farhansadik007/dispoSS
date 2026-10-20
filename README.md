@@ -119,7 +119,9 @@ Logs are written to:
 
 Open the main window and click **Settings** at the bottom of the window, or use **Settings** in the tray menu.
 
-The settings window controls:
+Settings slides in over the capture view inside the same window. Save applies the changes; Cancel or Escape returns without saving.
+
+The in-window settings panel controls:
 
 - Countdown delay
 - Automatic clipboard copy
@@ -145,6 +147,9 @@ Important implementation files:
 | File | Responsibility |
 | --- | --- |
 | `src/DisposableScreenshots/App.xaml.cs` | Startup, tray, hotkey, single instance, settings application |
+| `Views/MainWindow.xaml.cs` | Capture view, in-window settings transition, window actions |
+| `Controls/SettingsPanel.xaml.cs` | In-window settings panel and draft settings |
+| `Themes/SunsetTheme.xaml` | Sunset palette, pixel controls, and rounded frame styles |
 | `Services/CaptureCoordinator.cs` | Countdown, snapshot, overlays, preview orchestration |
 | `Services/ScreenCaptureService.cs` | GDI desktop snapshot and pixel cropping |
 | `Services/ScreenService.cs` | Monitor enumeration and DPI-aware bounds |
@@ -154,7 +159,6 @@ Important implementation files:
 | `Views/SelectionCanvas.cs` | Dark mask, selection rectangle, size badge |
 | `Views/CaptureOverlayWindow.xaml.cs` | Per-monitor overlay positioning and DPI mapping |
 | `Views/PreviewWindow.xaml.cs` | Copy/save/discard toast |
-| `Views/SettingsWindow.xaml.cs` | Settings UI |
 
 ## Design notes
 
@@ -163,7 +167,7 @@ Important implementation files:
 - The app is single-instance. Launching a second copy activates the existing window and exits.
 - The app is per-monitor DPI aware (`PerMonitorV2`).
 - The clipboard auto-clear timer only clears the clipboard if the custom marker data is still present. If you copied something else in the meantime, it leaves your clipboard alone.
-- WPF-UI supplies the dark theme and control styling. The overlay, countdown, and preview are custom-drawn/positioned for tight control over capture behavior.
+- WPF-UI supplies window/backdrop plumbing. The main window, in-window settings panel, and controls use a custom sunset retro theme; the overlay, countdown, and preview are custom-drawn/positioned for tight control over capture behavior.
 
 ## Known limitations / next up
 

@@ -1,0 +1,290 @@
+<UserControl x:Class="DisposableScreenshots.Controls.SettingsPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent"
+             FontFamily="{StaticResource PixelFont}"
+             FontSize="9"
+             Foreground="{StaticResource NavyBrush}"
+             Focusable="True"
+             SnapsToDevicePixels="True"
+             UseLayoutRounding="True">
+    <Grid Margin="20,16,20,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="SETTINGS"
+                           FontSize="26"
+                           FontWeight="Bold" />
+                <TextBlock Text="?"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource CoralBrush}" />
+            </StackPanel>
+            <TextBlock Text="CHANGE THE CAPTURE FLOW."
+                       Margin="1,5,0,0"
+                       FontSize="9"
+                       Opacity="0.65" />
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="0,12,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    Background="{StaticResource CreamLightBrush}"
+                    BorderBrush="{StaticResource NavyBrush}"
+                    BorderThickness="2"
+                    CornerRadius="12"
+                    Padding="12,10">
+                <StackPanel>
+                    <TextBlock Text="CAPTURE"
+                               FontSize="10"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource CoralBrush}" />
+
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="HOTKEY"
+                                   VerticalAlignment="Center" />
+                        <Border Grid.Column="1"
+                                Background="{StaticResource CreamBrush}"
+                                BorderBrush="{StaticResource NavyBrush}"
+                                BorderThickness="2"
+                                CornerRadius="7"
+                                Padding="7,3">
+                            <TextBlock x:Name="HotkeyText"
+                                       FontSize="8" />
+                        </Border>
+                    </Grid>
+
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="COUNTDOWN" />
+                            <TextBlock Text="BEFORE FREEZE"
+                                       Margin="0,2,0,0"
+                                       FontSize="7"
+                                       Opacity="0.6" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <Button Style="{StaticResource RetroStepButton}"
+                                    AutomationProperties.Name="Previous countdown"
+                                    ToolTip="Previous countdown"
+                                    Click="DelayPrevious_Click">
+                                <TextBlock Text="&lt;"
+                                           FontSize="12"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource NavyBrush}" />
+                            </Button>
+                            <Border MinWidth="46"
+                                    Margin="4,0"
+                                    Padding="6,4"
+                                    Background="{StaticResource CreamBrush}"
+                                    BorderBrush="{StaticResource NavyBrush}"
+                                    BorderThickness="2"
+                                    CornerRadius="7">
+                                <TextBlock x:Name="DelayValueText"
+                                           Text="3S"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                            </Border>
+                            <Button Style="{StaticResource RetroStepButton}"
+                                    AutomationProperties.Name="Next countdown"
+                                    ToolTip="Next countdown"
+                                    Click="DelayNext_Click">
+                                <TextBlock Text="&gt;"
+                                           FontSize="12"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource NavyBrush}" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <CheckBox x:Name="CopyCheckBox"
+                              Content="COPY TO CLIPBOARD"
+                              Style="{StaticResource RetroCheckBox}"
+                              Margin="0,10,0,0" />
+                    <CheckBox x:Name="ShowPreviewCheckBox"
+                              Content="SHOW PREVIEW"
+                              Style="{StaticResource RetroCheckBox}"
+                              Margin="0,8,0,0"
+                              Checked="ShowPreviewCheckBox_Checked"
+                              Unchecked="ShowPreviewCheckBox_Unchecked" />
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2"
+                    Background="{StaticResource CreamLightBrush}"
+                    BorderBrush="{StaticResource NavyBrush}"
+                    BorderThickness="2"
+                    CornerRadius="12"
+                    Padding="12,10">
+                <StackPanel>
+                    <TextBlock Text="PRIVACY"
+                               FontSize="10"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource CoralBrush}" />
+
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="CLEAR CLIPBOARD" />
+                            <TextBlock Text="IF STILL OURS"
+                                       Margin="0,2,0,0"
+                                       FontSize="7"
+                                       Opacity="0.6" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <Button Style="{StaticResource RetroStepButton}"
+                                    AutomationProperties.Name="Previous clipboard timer"
+                                    ToolTip="Previous clipboard timer"
+                                    Click="ClipboardPrevious_Click">
+                                <TextBlock Text="&lt;"
+                                           FontSize="12"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource NavyBrush}" />
+                            </Button>
+                            <Border MinWidth="46"
+                                    Margin="4,0"
+                                    Padding="6,4"
+                                    Background="{StaticResource CreamBrush}"
+                                    BorderBrush="{StaticResource NavyBrush}"
+                                    BorderThickness="2"
+                                    CornerRadius="7">
+                                <TextBlock x:Name="ClipboardValueText"
+                                           Text="OFF"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                            </Border>
+                            <Button Style="{StaticResource RetroStepButton}"
+                                    AutomationProperties.Name="Next clipboard timer"
+                                    ToolTip="Next clipboard timer"
+                                    Click="ClipboardNext_Click">
+                                <TextBlock Text="&gt;"
+                                           FontSize="12"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource NavyBrush}" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="PREVIEW TIMEOUT" />
+                            <TextBlock Text="HOVER PAUSES IT"
+                                       Margin="0,2,0,0"
+                                       FontSize="7"
+                                       Opacity="0.6" />
+                        </StackPanel>
+                        <StackPanel x:Name="PreviewStepper"
+                                    Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <Button Style="{StaticResource RetroStepButton}"
+                                    AutomationProperties.Name="Previous preview timeout"
+                                    ToolTip="Previous preview timeout"
+                                    Click="PreviewPrevious_Click">
+                                <TextBlock Text="&lt;"
+                                           FontSize="12"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource NavyBrush}" />
+                            </Button>
+                            <Border MinWidth="46"
+                                    Margin="4,0"
+                                    Padding="6,4"
+                                    Background="{StaticResource CreamBrush}"
+                                    BorderBrush="{StaticResource NavyBrush}"
+                                    BorderThickness="2"
+                                    CornerRadius="7">
+                                <TextBlock x:Name="PreviewValueText"
+                                           Text="8S"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                            </Border>
+                            <Button Style="{StaticResource RetroStepButton}"
+                                    AutomationProperties.Name="Next preview timeout"
+                                    ToolTip="Next preview timeout"
+                                    Click="PreviewNext_Click">
+                                <TextBlock Text="&gt;"
+                                           FontSize="12"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource NavyBrush}" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <Border Height="2"
+                            Margin="0,10,0,8"
+                            Background="{StaticResource NavyBrush}"
+                            Opacity="0.15" />
+
+                    <TextBlock Text="STARTUP"
+                               FontSize="10"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource CoralBrush}" />
+                    <CheckBox x:Name="StartupCheckBox"
+                              Content="START WITH WINDOWS"
+                              Style="{StaticResource RetroCheckBox}"
+                              Margin="0,8,0,0" />
+                    <TextBlock x:Name="DevNote"
+                               Text="DISABLED IN DEV MODE."
+                               Margin="0,6,0,0"
+                               FontSize="7"
+                               Opacity="0.6"
+                               TextWrapping="Wrap"
+                               Visibility="Collapsed" />
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="VersionText"
+                       VerticalAlignment="Center"
+                       FontSize="8"
+                       Opacity="0.55" />
+            <Button Grid.Column="1"
+                    Content="CANCEL"
+                    Style="{StaticResource RetroGhostButton}"
+                    Padding="14,8"
+                    Margin="0,0,7,0"
+                    FontSize="10"
+                    Click="CancelButton_Click" />
+            <Button Grid.Column="2"
+                    Content="SAVE"
+                    Style="{StaticResource RetroPrimaryButton}"
+                    Padding="14,8"
+                    FontSize="10"
+                    Click="SaveButton_Click" />
+        </Grid>
+    </Grid>
+</UserControl>

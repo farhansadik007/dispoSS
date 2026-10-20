@@ -25,7 +25,6 @@ public partial class App : Application
     private CaptureCoordinator? _capture;
     private AppSettings? _settings;
     private MainWindow? _mainWindow;
-    private SettingsWindow? _settingsWindow;
     private bool _exiting;
 
     public static bool IsDev { get; } =
@@ -334,6 +333,7 @@ public partial class App : Application
             _mainWindow.CaptureRegionRequested += (_, _) => BeginCapture(CaptureMode.Region);
             _mainWindow.CaptureFullScreenRequested += (_, _) => BeginCapture(CaptureMode.FullScreen);
             _mainWindow.SettingsRequested += (_, _) => ShowSettings();
+            _mainWindow.SettingsSaveRequested += (_, draft) => ApplySettings(draft);
             _mainWindow.ExitRequested += (_, _) => Shutdown();
             _mainWindow.Closed += (_, _) => _mainWindow = null;
         }
@@ -350,57 +350,47 @@ public partial class App : Application
             return;
         }
 
-        if (_settingsWindow is { IsVisible: true })
+        ShowMainWindow();
+        _mainWindow?.ShowSettings(_settings, IsDev);
+    }
+
+    private void ApplySettings(AppSettings draft)
+    {
+        if (_settings is null || _settingsService is null)
         {
-            _settingsWindow.Activate();
             return;
         }
 
-        var draft = _settings.Clone();
-        _settingsWindow = new SettingsWindow(draft, IsDev);
-        _settingsWindow.Closed += (_, _) =>
+        var previous = _settings;
+        _settings = draft;
+        _settings.Normalize();
+        AppLog.Info($"Applying settings: path={_settingsService.SettingsPath}, delay={_settings.DelaySeconds}, preview={_settings.PreviewSeconds}, clipboard={_settings.ClipboardClearSeconds}.");
+
+        try
         {
-            if (_settingsWindow?.Result == true)
+            _settingsService.Save(_settings);
+            _tray?.UpdateDelay(_settings.DelaySeconds);
+        }
+        catch (Exception exception)
+        {
+            AppLog.Error("Could not apply settings", exception);
+            _settings = previous;
+            _tray?.UpdateDelay(_settings.DelaySeconds);
+            _tray?.ShowWarning("Settings", "Could not save the new settings.");
+        }
+
+        if (!IsDev && _settings is not null)
+        {
+            try
             {
-                var previous = _settings;
-                _settings = draft;
-                _settings.Normalize();
-
-                try
-                {
-                    _settingsService.Save(_settings);
-                    _tray?.UpdateDelay(_settings.DelaySeconds);
-                }
-                catch (Exception exception)
-                {
-                    AppLog.Error("Could not apply settings", exception);
-                    _settings = previous;
-                    if (_settings is not null)
-                    {
-                        _tray?.UpdateDelay(_settings.DelaySeconds);
-                    }
-
-                    _tray?.ShowWarning("Settings", "Could not save the new settings.");
-                }
-
-                if (!IsDev && _settings is not null)
-                {
-                    try
-                    {
-                        StartupService.SetEnabled(_settings.StartWithWindows);
-                    }
-                    catch (Exception exception)
-                    {
-                        AppLog.Error("Could not update startup setting", exception);
-                        _tray?.ShowWarning("Startup setting", "Could not update the Windows startup entry.");
-                    }
-                }
+                StartupService.SetEnabled(_settings.StartWithWindows);
             }
-
-            _settingsWindow = null;
-        };
-        _settingsWindow.Show();
-        _settingsWindow.Activate();
+            catch (Exception exception)
+            {
+                AppLog.Error("Could not update startup setting", exception);
+                _tray?.ShowWarning("Startup setting", "Could not update the Windows startup entry.");
+            }
+        }
     }
 
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

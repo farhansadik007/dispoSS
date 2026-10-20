@@ -16,165 +16,195 @@
         UseLayoutRounding="True"
         SnapsToDevicePixels="True"
         TextOptions.TextFormattingMode="Display"
-        SourceInitialized="OnSourceInitialized">
+        SourceInitialized="OnSourceInitialized"
+        PreviewKeyDown="OnPreviewKeyDown">
     <controls:RetroFrame Title="DISPOSABLE SCREENSHOTS"
                          Style="{StaticResource RetroFrameStyle}"
                          SettingsRequested="SettingsButton_Click">
-        <Grid Margin="24,22,24,22">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <Grid x:Name="ViewHost"
+              Height="380"
+              ClipToBounds="True">
+            <Grid x:Name="CaptureView">
+                <Grid.RenderTransform>
+                    <TranslateTransform x:Name="CaptureTranslate" />
+                </Grid.RenderTransform>
+                <Grid Margin="24,22,24,22">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Margin="0,0,0,20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+                    <Grid Grid.Row="0" Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                <StackPanel VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="CAPTURE"
-                                   FontSize="42"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource NavyBrush}" />
-                        <TextBlock Text="?"
-                                   FontSize="42"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource CoralBrush}" />
-                    </StackPanel>
-                    <TextBlock Text="QUICK. PRIVATE. GONE."
-                               Margin="2,8,0,0"
-                               FontSize="11"
-                               Foreground="{StaticResource NavyBrush}"
-                               Opacity="0.8" />
-                </StackPanel>
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="CAPTURE"
+                                           FontSize="42"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource NavyBrush}" />
+                                <TextBlock Text="?"
+                                           FontSize="42"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource CoralBrush}" />
+                            </StackPanel>
+                            <TextBlock Text="QUICK. PRIVATE. GONE."
+                                       Margin="2,8,0,0"
+                                       FontSize="11"
+                                       Foreground="{StaticResource NavyBrush}"
+                                       Opacity="0.8" />
+                        </StackPanel>
 
-                <Canvas Grid.Column="1"
-                        Width="150"
-                        Height="94"
-                        Margin="18,0,0,0"
-                        ClipToBounds="True"
-                        VerticalAlignment="Center">
-                    <Ellipse Canvas.Left="-12"
-                             Canvas.Top="34"
-                             Width="174"
-                             Height="174"
-                             Stroke="{StaticResource TealBrush}"
-                             StrokeThickness="16" />
-                    <Ellipse Canvas.Left="8"
-                             Canvas.Top="54"
-                             Width="134"
-                             Height="134"
-                             Stroke="{StaticResource SeafoamBrush}"
-                             StrokeThickness="16" />
-                    <Ellipse Canvas.Left="28"
-                             Canvas.Top="74"
-                             Width="94"
-                             Height="94"
-                             Stroke="{StaticResource PeachBrush}"
-                             StrokeThickness="16" />
-                    <Ellipse Canvas.Left="48"
-                             Canvas.Top="94"
-                             Width="54"
-                             Height="54"
-                             Stroke="{StaticResource CoralBrush}"
-                             StrokeThickness="16" />
-                </Canvas>
+                        <Canvas Grid.Column="1"
+                                Width="150"
+                                Height="94"
+                                Margin="18,0,0,0"
+                                ClipToBounds="True"
+                                VerticalAlignment="Center">
+                            <Ellipse Canvas.Left="-12"
+                                     Canvas.Top="34"
+                                     Width="174"
+                                     Height="174"
+                                     Stroke="{StaticResource TealBrush}"
+                                     StrokeThickness="16" />
+                            <Ellipse Canvas.Left="8"
+                                     Canvas.Top="54"
+                                     Width="134"
+                                     Height="134"
+                                     Stroke="{StaticResource SeafoamBrush}"
+                                     StrokeThickness="16" />
+                            <Ellipse Canvas.Left="28"
+                                     Canvas.Top="74"
+                                     Width="94"
+                                     Height="94"
+                                     Stroke="{StaticResource PeachBrush}"
+                                     StrokeThickness="16" />
+                            <Ellipse Canvas.Left="48"
+                                     Canvas.Top="94"
+                                     Width="54"
+                                     Height="54"
+                                     Stroke="{StaticResource CoralBrush}"
+                                     StrokeThickness="16" />
+                        </Canvas>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="0,0,0,18">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Style="{StaticResource RetroPrimaryButton}"
+                                Height="72"
+                                Margin="0,0,8,0"
+                                Click="CaptureRegion_Click">
+                            <StackPanel>
+                                <TextBlock Text="CAPTURE REGION"
+                                           FontSize="13"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center" />
+                                <TextBlock x:Name="HotkeyText"
+                                           Margin="0,5,0,0"
+                                           FontSize="9"
+                                           HorizontalAlignment="Center"
+                                           Opacity="0.75" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="1"
+                                Style="{StaticResource RetroSecondaryButton}"
+                                Height="72"
+                                Margin="8,0,0,0"
+                                Click="CaptureFullScreen_Click">
+                            <StackPanel>
+                                <TextBlock Text="FULL SCREEN"
+                                           FontSize="13"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center" />
+                                <TextBlock Text="ALL MONITORS"
+                                           Margin="0,5,0,0"
+                                           FontSize="9"
+                                           HorizontalAlignment="Center"
+                                           Opacity="0.75" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <Border Grid.Row="2"
+                            Margin="0,0,0,18"
+                            Padding="14,11"
+                            Background="{StaticResource SeafoamBrush}"
+                            BorderBrush="{StaticResource NavyBrush}"
+                            BorderThickness="2"
+                            CornerRadius="12">
+                        <TextBlock Text="CLIPBOARD FIRST  •  NO HISTORY  •  SAVE ONLY IF YOU WANT IT"
+                                   FontSize="9"
+                                   Foreground="{StaticResource NavyBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextWrapping="Wrap" />
+                    </Border>
+
+                    <TextBlock Grid.Row="3"
+                               Text="THE WINDOW HIDES DURING A CAPTURE."
+                               FontSize="8"
+                               Opacity="0.5"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock x:Name="VersionText"
+                                   VerticalAlignment="Center"
+                                   FontSize="8"
+                                   Foreground="{StaticResource NavyBrush}"
+                                   Opacity="0.55" />
+
+                        <Button Grid.Column="1"
+                                Content="SETTINGS"
+                                Style="{StaticResource RetroGhostButton}"
+                                Padding="12,8"
+                                Margin="0,0,7,0"
+                                FontSize="10"
+                                Click="SettingsButton_Click" />
+                        <Button Grid.Column="2"
+                                Content="HIDE TO TRAY"
+                                Style="{StaticResource RetroGhostButton}"
+                                Padding="12,8"
+                                Margin="0,0,7,0"
+                                FontSize="10"
+                                Click="HideButton_Click" />
+                        <Button Grid.Column="3"
+                                Content="EXIT"
+                                Style="{StaticResource RetroDangerButton}"
+                                Padding="12,8"
+                                FontSize="10"
+                                Click="ExitButton_Click" />
+                    </Grid>
+                </Grid>
             </Grid>
 
-            <Grid Grid.Row="1" Margin="0,0,0,18">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Button Style="{StaticResource RetroPrimaryButton}"
-                        Height="72"
-                        Margin="0,0,8,0"
-                        Click="CaptureRegion_Click">
-                    <StackPanel>
-                        <TextBlock Text="CAPTURE REGION"
-                                   FontSize="13"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Center" />
-                        <TextBlock x:Name="HotkeyText"
-                                   Margin="0,5,0,0"
-                                   FontSize="9"
-                                   HorizontalAlignment="Center"
-                                   Opacity="0.75" />
-                    </StackPanel>
-                </Button>
-
-                <Button Grid.Column="1"
-                        Style="{StaticResource RetroSecondaryButton}"
-                        Height="72"
-                        Margin="8,0,0,0"
-                        Click="CaptureFullScreen_Click">
-                    <StackPanel>
-                        <TextBlock Text="FULL SCREEN"
-                                   FontSize="13"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Center" />
-                        <TextBlock Text="ALL MONITORS"
-                                   Margin="0,5,0,0"
-                                   FontSize="9"
-                                   HorizontalAlignment="Center"
-                                   Opacity="0.75" />
-                    </StackPanel>
-                </Button>
-            </Grid>
-
-            <Border Grid.Row="2"
-                    Margin="0,0,0,18"
-                    Padding="14,11"
-                    Background="{StaticResource SeafoamBrush}"
-                    BorderBrush="{StaticResource NavyBrush}"
-                    BorderThickness="2"
-                    CornerRadius="12">
-                <TextBlock Text="CLIPBOARD FIRST  •  NO HISTORY  •  SAVE ONLY IF YOU WANT IT"
-                           FontSize="9"
-                           Foreground="{StaticResource NavyBrush}"
-                           HorizontalAlignment="Center"
-                           TextWrapping="Wrap" />
-            </Border>
-
-            <Grid Grid.Row="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock x:Name="VersionText"
-                           VerticalAlignment="Center"
-                           FontSize="8"
-                           Foreground="{StaticResource NavyBrush}"
-                           Opacity="0.55" />
-
-                <Button Grid.Column="1"
-                        Content="SETTINGS"
-                        Style="{StaticResource RetroGhostButton}"
-                        Padding="12,8"
-                        Margin="0,0,7,0"
-                        FontSize="10"
-                        Click="SettingsButton_Click" />
-                <Button Grid.Column="2"
-                        Content="HIDE TO TRAY"
-                        Style="{StaticResource RetroGhostButton}"
-                        Padding="12,8"
-                        Margin="0,0,7,0"
-                        FontSize="10"
-                        Click="HideButton_Click" />
-                <Button Grid.Column="3"
-                        Content="EXIT"
-                        Style="{StaticResource RetroDangerButton}"
-                        Padding="12,8"
-                        FontSize="10"
-                        Click="ExitButton_Click" />
+            <Grid x:Name="SettingsView"
+                  Visibility="Collapsed"
+                  Opacity="0"
+                  Background="Transparent">
+                <Grid.RenderTransform>
+                    <TranslateTransform x:Name="SettingsTranslate" />
+                </Grid.RenderTransform>
+                <controls:SettingsPanel x:Name="SettingsPanel"
+                                        SaveRequested="SettingsPanel_SaveRequested"
+                                        CancelRequested="SettingsPanel_CancelRequested" />
             </Grid>
         </Grid>
     </controls:RetroFrame>

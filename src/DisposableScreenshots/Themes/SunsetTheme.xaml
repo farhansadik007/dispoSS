@@ -96,6 +96,8 @@
         <Setter Property="Height" Value="34" />
         <Setter Property="Background" Value="{StaticResource CreamLightBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource NavyBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource NavyBrush}" />
+        <Setter Property="FontFamily" Value="{StaticResource PixelFont}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="UseLayoutRounding" Value="True" />
@@ -132,6 +134,73 @@
                                     <TranslateTransform X="1" Y="1" />
                                 </Setter.Value>
                             </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="RetroStepButton"
+           TargetType="Button"
+           BasedOn="{StaticResource RetroWindowButton}">
+        <Setter Property="Width" Value="30" />
+        <Setter Property="Height" Value="28" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style x:Key="RetroCheckBox" TargetType="CheckBox">
+        <Setter Property="FontFamily" Value="{StaticResource PixelFont}" />
+        <Setter Property="FontSize" Value="9" />
+        <Setter Property="Foreground" Value="{StaticResource NavyBrush}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                        <Grid Width="20"
+                              Height="20"
+                              Margin="0,0,8,0"
+                              VerticalAlignment="Center">
+                            <Border Background="{StaticResource MaroonBrush}"
+                                    CornerRadius="5"
+                                    Margin="2,2,0,0" />
+                            <Border x:Name="Box"
+                                    Background="{StaticResource CreamLightBrush}"
+                                    BorderBrush="{StaticResource NavyBrush}"
+                                    BorderThickness="2"
+                                    CornerRadius="5">
+                                <Path x:Name="CheckMark"
+                                      Data="M3,8 L7,12 L15,3"
+                                      Margin="3"
+                                      Stroke="{StaticResource NavyBrush}"
+                                      StrokeThickness="2.5"
+                                      StrokeStartLineCap="Square"
+                                      StrokeEndLineCap="Square"
+                                      Stretch="Uniform"
+                                      Visibility="Collapsed" />
+                            </Border>
+                            <Border x:Name="HoverTint"
+                                    Background="{StaticResource HoverTintBrush}"
+                                    CornerRadius="4"
+                                    IsHitTestVisible="False"
+                                    Visibility="Collapsed" />
+                        </Grid>
+                        <ContentPresenter VerticalAlignment="Center"
+                                          RecognizesAccessKey="True" />
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="HoverTint" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.45" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
