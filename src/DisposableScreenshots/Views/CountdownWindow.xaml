@@ -13,42 +13,70 @@
         ResizeMode="NoResize"
         WindowStartupLocation="Manual"
         IsHitTestVisible="False"
-        Focusable="False">
+        Focusable="False"
+        Foreground="{StaticResource NavyBrush}"
+        FontFamily="{StaticResource PixelFont}"
+        FontSize="10"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display">
     <Grid>
-        <Border Background="#E6121216"
-                CornerRadius="28"
-                BorderBrush="#33FFFFFF"
-                BorderThickness="1">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock x:Name="CountdownText"
-                           Text="3"
+        <Border Background="{StaticResource MaroonBrush}"
+                CornerRadius="30"
+                Margin="8,8,0,0" />
+
+        <Border Background="{StaticResource CreamBrush}"
+                BorderBrush="{StaticResource NavyBrush}"
+                BorderThickness="3"
+                CornerRadius="30"
+                Padding="16,14">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <Border Width="28" Height="4" Margin="2,0" Background="{StaticResource TealBrush}" CornerRadius="2" />
+                    <Border Width="28" Height="4" Margin="2,0" Background="{StaticResource SeafoamBrush}" CornerRadius="2" />
+                    <Border Width="28" Height="4" Margin="2,0" Background="{StaticResource PeachBrush}" CornerRadius="2" />
+                    <Border Width="28" Height="4" Margin="2,0" Background="{StaticResource CoralBrush}" CornerRadius="2" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="1"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <TextBlock x:Name="CountdownText"
+                               Text="3"
+                               HorizontalAlignment="Center"
+                               FontSize="76"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource CoralBrush}" />
+                    <TextBlock Text="GET READY"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,10"
+                               FontSize="11"
+                               FontWeight="Bold" />
+                    <ProgressBar x:Name="CountdownProgress"
+                                 Width="140"
+                                 Minimum="0"
+                                 Maximum="1"
+                                 Value="0"
+                                 Style="{StaticResource RetroProgressBar}" />
+                </StackPanel>
+
+                <TextBlock Grid.Row="2"
+                           Text="PRESS THE HOTKEY AGAIN TO CANCEL"
                            HorizontalAlignment="Center"
-                           FontFamily="Segoe UI"
-                           FontSize="86"
-                           FontWeight="Bold"
-                           Foreground="#FFFF7A45" />
-                <TextBlock Text="Get ready"
-                           HorizontalAlignment="Center"
-                           Margin="0,-4,0,12"
-                           FontFamily="Segoe UI"
-                           FontSize="14"
-                           Foreground="#FFF4F4F6" />
-                <ProgressBar x:Name="CountdownProgress"
-                             Width="120"
-                             Height="4"
-                             Minimum="0"
-                             Maximum="1"
-                             Value="0"
-                             Foreground="#FFFF7A45"
-                             Background="#33FFFFFF"
-                             BorderThickness="0" />
-                <TextBlock Text="Press the hotkey again to cancel"
-                           HorizontalAlignment="Center"
-                           Margin="0,14,0,0"
-                           FontFamily="Segoe UI"
-                           FontSize="10"
-                           Foreground="#99FFFFFF" />
-            </StackPanel>
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           Margin="0,10,0,0"
+                           FontSize="7"
+                           Opacity="0.55" />
+            </Grid>
         </Border>
     </Grid>
 </Window>

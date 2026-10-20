@@ -45,7 +45,8 @@
                             <Grid>
                                 <ContentPresenter HorizontalAlignment="Center"
                                                   VerticalAlignment="Center"
-                                                  RecognizesAccessKey="True" />
+                                                  RecognizesAccessKey="True"
+                                                  TextElement.Foreground="{TemplateBinding Foreground}" />
                                 <Border x:Name="HoverTint"
                                         Background="{StaticResource HoverTintBrush}"
                                         CornerRadius="9"
@@ -115,7 +116,9 @@
                                 CornerRadius="8">
                             <Grid>
                                 <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" />
+                                                  VerticalAlignment="Center"
+                                                  RecognizesAccessKey="True"
+                                                  TextElement.Foreground="{TemplateBinding Foreground}" />
                                 <Border x:Name="HoverTint"
                                         Background="{StaticResource HoverTintBrush}"
                                         CornerRadius="6"
@@ -190,7 +193,8 @@
                                     Visibility="Collapsed" />
                         </Grid>
                         <ContentPresenter VerticalAlignment="Center"
-                                          RecognizesAccessKey="True" />
+                                          RecognizesAccessKey="True"
+                                          TextElement.Foreground="{TemplateBinding Foreground}" />
                     </StackPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
@@ -203,6 +207,185 @@
                             <Setter Property="Opacity" Value="0.45" />
                         </Trigger>
                     </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="RetroProgressBar" TargetType="ProgressBar">
+        <Setter Property="Height" Value="10" />
+        <Setter Property="Background" Value="{StaticResource SeafoamBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource CoralBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource NavyBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ProgressBar">
+                    <Grid ClipToBounds="True">
+                        <Border x:Name="PART_Track"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5" />
+                        <Border x:Name="PART_Indicator"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Stretch"
+                                Background="{TemplateBinding Foreground}"
+                                CornerRadius="4"
+                                Margin="2" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="RetroTrayMenu" TargetType="ContextMenu">
+        <Setter Property="Background" Value="{StaticResource CreamLightBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource NavyBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="FontFamily" Value="{StaticResource PixelFont}" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="Foreground" Value="{StaticResource NavyBrush}" />
+        <Setter Property="HasDropShadow" Value="False" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContextMenu">
+                    <Grid Margin="8">
+                        <Border Background="{StaticResource MaroonBrush}"
+                                CornerRadius="12"
+                                Margin="4,4,0,0" />
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12"
+                                Padding="6">
+                            <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="RetroTrayMenuItem" TargetType="MenuItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{StaticResource NavyBrush}" />
+        <Setter Property="FontFamily" Value="{StaticResource PixelFont}" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="Padding" Value="10,6" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Grid>
+                        <Border x:Name="Root"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="7"
+                                Padding="{TemplateBinding Padding}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="18" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="14" />
+                                </Grid.ColumnDefinitions>
+
+                                <Path x:Name="CheckMark"
+                                      Width="12"
+                                      Height="12"
+                                      Data="M2,7 L6,11 L14,2"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Stroke="{StaticResource NavyBrush}"
+                                      StrokeThickness="2"
+                                      StrokeStartLineCap="Square"
+                                      StrokeEndLineCap="Square"
+                                      Stretch="Uniform"
+                                      Visibility="Collapsed" />
+
+                                <ContentPresenter Grid.Column="1"
+                                                  VerticalAlignment="Center"
+                                                  ContentSource="Header"
+                                                  RecognizesAccessKey="True"
+                                                  TextElement.Foreground="{TemplateBinding Foreground}" />
+
+                                <TextBlock Grid.Column="2"
+                                           Margin="16,0,6,0"
+                                           VerticalAlignment="Center"
+                                           FontSize="8"
+                                           Opacity="0.55"
+                                           Text="{TemplateBinding InputGestureText}" />
+
+                                <Path x:Name="SubmenuArrow"
+                                      Grid.Column="3"
+                                      Width="5"
+                                      Height="9"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Data="M0,0 L5,4.5 L0,9"
+                                      Stroke="{StaticResource NavyBrush}"
+                                      StrokeThickness="1.6"
+                                      StrokeStartLineCap="Square"
+                                      StrokeEndLineCap="Square"
+                                      Stretch="Uniform"
+                                      Visibility="Collapsed" />
+                            </Grid>
+                        </Border>
+
+                        <Popup x:Name="PART_Popup"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               HorizontalOffset="-2"
+                               IsOpen="{TemplateBinding IsSubmenuOpen}"
+                               Placement="Right"
+                               PopupAnimation="Fade"
+                               VerticalOffset="-4">
+                            <Grid Margin="8">
+                                <Border Background="{StaticResource MaroonBrush}"
+                                        CornerRadius="12"
+                                        Margin="4,4,0,0" />
+                                <Border Background="{StaticResource CreamLightBrush}"
+                                        BorderBrush="{StaticResource NavyBrush}"
+                                        BorderThickness="2"
+                                        CornerRadius="12"
+                                        Padding="6">
+                                    <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Cycle" />
+                                </Border>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="Root" Property="Background" Value="{StaticResource CreamBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="Role" Value="SubmenuHeader">
+                            <Setter TargetName="SubmenuArrow" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Root" Property="Opacity" Value="0.45" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="RetroTraySeparator" TargetType="Separator">
+        <Setter Property="Margin" Value="8,4" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Separator">
+                    <Border Height="2"
+                            Background="{StaticResource NavyBrush}"
+                            CornerRadius="1"
+                            Opacity="0.18" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -149,7 +149,7 @@ Important implementation files:
 | `src/DisposableScreenshots/App.xaml.cs` | Startup, tray, hotkey, single instance, settings application |
 | `Views/MainWindow.xaml.cs` | Capture view, in-window settings transition, window actions |
 | `Controls/SettingsPanel.xaml.cs` | In-window settings panel and draft settings |
-| `Themes/SunsetTheme.xaml` | Sunset palette, pixel controls, and rounded frame styles |
+| `Themes/SunsetTheme.xaml` | Sunset palette, pixel controls, rounded frame, preview/countdown, and tray menu styles |
 | `Services/CaptureCoordinator.cs` | Countdown, snapshot, overlays, preview orchestration |
 | `Services/ScreenCaptureService.cs` | GDI desktop snapshot and pixel cropping |
 | `Services/ScreenService.cs` | Monitor enumeration and DPI-aware bounds |
@@ -167,7 +167,7 @@ Important implementation files:
 - The app is single-instance. Launching a second copy activates the existing window and exits.
 - The app is per-monitor DPI aware (`PerMonitorV2`).
 - The clipboard auto-clear timer only clears the clipboard if the custom marker data is still present. If you copied something else in the meantime, it leaves your clipboard alone.
-- WPF-UI supplies window/backdrop plumbing. The main window, in-window settings panel, and controls use a custom sunset retro theme; the overlay, countdown, and preview are custom-drawn/positioned for tight control over capture behavior.
+- WPF-UI supplies window/backdrop plumbing. The main window, in-window settings panel, preview toast, countdown card, and tray menu use the custom sunset retro theme; the selection overlay stays custom-drawn and positioned for tight control over capture behavior.
 
 ## Known limitations / next up
 

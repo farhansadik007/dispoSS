@@ -137,7 +137,33 @@ public sealed class TrayService : IDisposable
         exitItem.Click += (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty);
         menu.Items.Add(exitItem);
 
+        menu.Style = Application.Current.TryFindResource("RetroTrayMenu") as Style;
+        ApplyTrayItemStyles(menu.Items);
+
         return menu;
+    }
+
+    private static void ApplyTrayItemStyles(ItemCollection items)
+    {
+        var itemStyle = Application.Current.TryFindResource("RetroTrayMenuItem") as Style;
+        var separatorStyle = Application.Current.TryFindResource("RetroTraySeparator") as Style;
+
+        foreach (var item in items)
+        {
+            if (item is MenuItem menuItem)
+            {
+                if (itemStyle is not null)
+                {
+                    menuItem.Style = itemStyle;
+                }
+
+                ApplyTrayItemStyles(menuItem.Items);
+            }
+            else if (item is Separator separator && separatorStyle is not null)
+            {
+                separator.Style = separatorStyle;
+            }
+        }
     }
 
     private static Icon LoadIcon()

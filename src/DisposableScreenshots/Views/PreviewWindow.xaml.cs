@@ -34,7 +34,7 @@ public partial class PreviewWindow : Window
 
         PreviewImage.Source = image;
         MetaText.Text = $"{image.PixelWidth} × {image.PixelHeight} px · disposable · not saved";
-        StatusText.Text = copied ? "Copied to clipboard" : "Screenshot ready";
+        SetStatus(copied ? "Copied to clipboard" : "Screenshot ready");
         UpdateAutoCloseText();
 
         _closeTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
@@ -99,11 +99,11 @@ public partial class PreviewWindow : Window
     {
         if (_clipboard.Copy(_image, _clearAfterSeconds))
         {
-            StatusText.Text = "Copied to clipboard";
+            SetStatus("Copied to clipboard");
         }
         else
         {
-            StatusText.Text = "Clipboard is busy — try Copy again";
+            SetStatus("Clipboard is busy — try Copy again", true);
         }
     }
 
@@ -139,19 +139,24 @@ public partial class PreviewWindow : Window
 
             using var stream = File.Create(dialog.FileName);
             encoder.Save(stream);
-            StatusText.Text = "Saved";
+            SetStatus("Saved");
             AutoCloseText.Text = "Saved to disk";
             _remainingSeconds = 0;
         }
         catch (Exception exception)
         {
             AppLog.Error("Could not save screenshot", exception);
-            StatusText.Text = "Could not save the file";
-            StatusText.Foreground = new SolidColorBrush(Color.FromRgb(255, 122, 105));
+            SetStatus("Could not save the file", true);
             _remainingSeconds = Math.Max(2, previousRemainingSeconds);
             UpdateAutoCloseText();
             StartCloseTimer();
         }
+    }
+
+    private void SetStatus(string text, bool error = false)
+    {
+        StatusText.Text = text;
+        StatusText.Foreground = (Brush)FindResource(error ? "RedBrush" : "NavyBrush");
     }
 
     private void DiscardButton_Click(object sender, RoutedEventArgs e) => Close();
