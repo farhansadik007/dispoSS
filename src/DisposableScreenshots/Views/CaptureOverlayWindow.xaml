@@ -8,7 +8,7 @@
         Background="Transparent"
         Topmost="True"
         ShowInTaskbar="False"
-        ShowActivated="False"
+        ShowActivated="True"
         ResizeMode="NoResize"
         WindowStartupLocation="Manual"
         Focusable="True">
