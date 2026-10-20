@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyName>DisposableScreenshots</AssemblyName>
+    <RootNamespace>DisposableScreenshots</RootNamespace>
+    <Platforms>AnyCPU;x64</Platforms>
+    <Version>0.1.0</Version>
+    <Authors>Disposable Screenshots</Authors>
+    <Description>A disposable screenshot tool with a countdown timer.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="H.NotifyIcon.Wpf" Version="2.4.1" />
+    <PackageReference Include="WPF-UI" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\app.ico" />
+    <Watch Include="**\*.xaml" />
+  </ItemGroup>
+
+</Project>

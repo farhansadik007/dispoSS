@@ -1,0 +1,312 @@
+using System.Threading;
+using System.Windows;
+using System.Windows.Threading;
+using DisposableScreenshots.Models;
+using DisposableScreenshots.Services;
+using DisposableScreenshots.Views;
+using Wpf.Ui.Appearance;
+using WindowBackdropType = Wpf.Ui.Controls.WindowBackdropType;
+
+namespace DisposableScreenshots;
+
+public partial class App : Application
+{
+    private const string MutexName = @"Local\DisposableScreenshots.SingleInstance";
+
+    private Mutex? _singleInstance;
+    private bool _ownsMutex;
+    private TrayService? _tray;
+    private HotkeyService? _hotkey;
+    private ClipboardService? _clipboard;
+    private SettingsService? _settingsService;
+    private CaptureCoordinator? _capture;
+    private AppSettings? _settings;
+    private SettingsWindow? _settingsWindow;
+    private bool _exiting;
+
+    public static bool IsDev { get; } =
+        string.Equals(Environment.GetEnvironmentVariable("DISPOSABLE_SS_DEV"), "1", StringComparison.Ordinal);
+
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        base.OnStartup(e);
+
+        DispatcherUnhandledException += OnDispatcherUnhandledException;
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+        {
+            if (args.ExceptionObject is Exception exception)
+            {
+                AppLog.Error("Unhandled exception", exception);
+            }
+        };
+
+        _singleInstance = new Mutex(true, MutexName, out var createdNew);
+        _ownsMutex = createdNew;
+
+        if (!createdNew)
+        {
+            MessageBox.Show(
+                "Disposable Screenshots is already running in the system tray.",
+                "Disposable Screenshots",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+            Shutdown();
+            return;
+        }
+
+        try
+        {
+            ApplicationThemeManager.Apply(ApplicationTheme.Dark, WindowBackdropType.None, false);
+
+            _settingsService = new SettingsService(IsDev);
+            _settings = _settingsService.Load();
+            _clipboard = new ClipboardService();
+            _capture = new CaptureCoordinator(_settings, _clipboard);
+
+            BuildTray();
+            BuildHotkey();
+
+            var autoCapture = e.Args.Any(argument =>
+                string.Equals(argument, "--capture", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(argument, "--capture-full", StringComparison.OrdinalIgnoreCase));
+
+            if (IsDev && !autoCapture)
+            {
+                ShowSettings();
+            }
+
+            if (e.Args.Any(argument => string.Equals(argument, "--capture-full", StringComparison.OrdinalIgnoreCase)))
+            {
+                Dispatcher.BeginInvoke(() => BeginCapture(CaptureMode.FullScreen));
+            }
+            else if (e.Args.Any(argument => string.Equals(argument, "--capture", StringComparison.OrdinalIgnoreCase)))
+            {
+                Dispatcher.BeginInvoke(() => BeginCapture(CaptureMode.Region));
+            }
+        }
+        catch (Exception exception)
+        {
+            AppLog.Error("Startup failed", exception);
+            MessageBox.Show(
+                $"Disposable Screenshots could not start.\n\n{exception.Message}",
+                "Startup error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            Shutdown();
+        }
+    }
+
+    private void BuildTray()
+    {
+        if (_settings is null || _capture is null)
+        {
+            return;
+        }
+
+        _tray = new TrayService(_settings);
+        _tray.CaptureRegionRequested += (_, _) => BeginCapture(CaptureMode.Region);
+        _tray.CaptureFullScreenRequested += (_, _) => BeginCapture(CaptureMode.FullScreen);
+        _tray.SettingsRequested += (_, _) => ShowSettings();
+        _tray.ExitRequested += (_, _) => Shutdown();
+        _tray.DelayChanged += (_, seconds) =>
+        {
+            if (_settings is null || _settingsService is null)
+            {
+                return;
+            }
+
+            var previous = _settings.DelaySeconds;
+            _settings.DelaySeconds = seconds;
+            _settings.Normalize();
+
+            try
+            {
+                _settingsService.Save(_settings);
+                _tray?.UpdateDelay(_settings.DelaySeconds);
+            }
+            catch (Exception exception)
+            {
+                AppLog.Error("Could not save delay setting", exception);
+                _settings.DelaySeconds = previous;
+                _tray?.UpdateDelay(previous);
+                _tray?.ShowWarning("Settings", "Could not save the delay setting.");
+            }
+        };
+
+        if (_settings.ShowFirstRunTip)
+        {
+            _settings.ShowFirstRunTip = false;
+
+            try
+            {
+                _settingsService?.Save(_settings);
+            }
+            catch (Exception exception)
+            {
+                AppLog.Error("Could not save first-run state", exception);
+            }
+
+            _tray.ShowInfo(
+                "Disposable Screenshots",
+                $"Running in the tray. Press {HotkeyDefinition.Parse(_settings.Hotkey)} to capture.");
+        }
+    }
+
+    private void BuildHotkey()
+    {
+        if (_settings is null)
+        {
+            return;
+        }
+
+        _hotkey = new HotkeyService();
+        _hotkey.Pressed += (_, _) =>
+        {
+            AppLog.Info("Global hotkey pressed.");
+
+            if (_capture?.IsBusy == true)
+            {
+                _capture.Cancel();
+                return;
+            }
+
+            BeginCapture(CaptureMode.Region);
+        };
+
+        var hotkey = HotkeyDefinition.Parse(_settings.Hotkey);
+        if (!_hotkey.Register(hotkey))
+        {
+            AppLog.Info($"Could not register global hotkey {hotkey}.");
+            _tray?.ShowWarning(
+                "Hotkey unavailable",
+                $"{hotkey} is already used by another app. Use the tray menu to capture.");
+        }
+        else
+        {
+            AppLog.Info($"Registered global hotkey {hotkey}.");
+        }
+    }
+
+    private async void BeginCapture(CaptureMode mode)
+    {
+        if (_capture is null)
+        {
+            return;
+        }
+
+        try
+        {
+            await _capture.StartAsync(mode);
+        }
+        catch (Exception exception)
+        {
+            AppLog.Error("Capture failed", exception);
+            MessageBox.Show(
+                $"The capture could not be completed.\n\n{exception.Message}",
+                "Capture error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+    }
+
+    private void ShowSettings()
+    {
+        if (_settings is null || _settingsService is null)
+        {
+            return;
+        }
+
+        if (_settingsWindow is { IsVisible: true })
+        {
+            _settingsWindow.Activate();
+            return;
+        }
+
+        var draft = _settings.Clone();
+        _settingsWindow = new SettingsWindow(draft, IsDev);
+        _settingsWindow.Closed += (_, _) =>
+        {
+            if (_settingsWindow?.Result == true)
+            {
+                var previous = _settings;
+                _settings = draft;
+                _settings.Normalize();
+
+                try
+                {
+                    _settingsService.Save(_settings);
+                    _tray?.UpdateDelay(_settings.DelaySeconds);
+                }
+                catch (Exception exception)
+                {
+                    AppLog.Error("Could not apply settings", exception);
+                    _settings = previous;
+                    if (_settings is not null)
+                    {
+                        _tray?.UpdateDelay(_settings.DelaySeconds);
+                    }
+
+                    _tray?.ShowWarning("Settings", "Could not save the new settings.");
+                }
+
+                if (!IsDev && _settings is not null)
+                {
+                    try
+                    {
+                        StartupService.SetEnabled(_settings.StartWithWindows);
+                    }
+                    catch (Exception exception)
+                    {
+                        AppLog.Error("Could not update startup setting", exception);
+                        _tray?.ShowWarning("Startup setting", "Could not update the Windows startup entry.");
+                    }
+                }
+            }
+
+            _settingsWindow = null;
+        };
+        _settingsWindow.Show();
+        _settingsWindow.Activate();
+    }
+
+    private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+        AppLog.Error("Dispatcher exception", e.Exception);
+        e.Handled = true;
+        MessageBox.Show(
+            $"Something went wrong.\n\n{e.Exception.Message}",
+            "Disposable Screenshots",
+            MessageBoxButton.OK,
+            MessageBoxImage.Error);
+    }
+
+    protected override void OnExit(ExitEventArgs e)
+    {
+        if (_exiting)
+        {
+            base.OnExit(e);
+            return;
+        }
+
+        _exiting = true;
+        _tray?.Dispose();
+        _hotkey?.Dispose();
+        _clipboard?.Dispose();
+        _capture?.Dispose();
+
+        if (_ownsMutex)
+        {
+            try
+            {
+                _singleInstance?.ReleaseMutex();
+            }
+            catch (ApplicationException)
+            {
+                // The mutex was already released.
+            }
+        }
+
+        _singleInstance?.Dispose();
+        base.OnExit(e);
+    }
+}

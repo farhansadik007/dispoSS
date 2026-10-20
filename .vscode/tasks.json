@@ -1,0 +1,28 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "shell",
+      "command": ".\\build.cmd",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "dev",
+      "type": "shell",
+      "command": ".\\dev.cmd",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "publish",
+      "type": "shell",
+      "command": ".\\publish.cmd",
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}
