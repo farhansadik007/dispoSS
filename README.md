@@ -8,6 +8,7 @@ Built with **C# / WPF on .NET 10** — no Electron, no browser, no background cl
 
 ## Features
 
+- Visible main window with **Capture region** and **Capture full screen** buttons
 - Global hotkey: **Ctrl+Alt+S**
 - Countdown timer before the screen is frozen (default 3 seconds)
 - Region capture on the monitor where you start the capture
@@ -60,7 +61,7 @@ It installs per user, so no administrator rights are required. The default locat
 %LOCALAPPDATA%\Programs\Disposable Screenshots
 ```
 
-The installer adds a Start Menu shortcut and can optionally add a desktop shortcut. After installation the app starts from the Start Menu and lives in the system tray. To remove it, use **Settings > Apps > Installed apps**, or run the uninstaller in the install folder.
+The installer adds a Start Menu shortcut and a desktop shortcut by default. After installation the app opens its main window and also lives in the system tray. To remove it, use **Settings > Apps > Installed apps**, or run the uninstaller in the install folder.
 
 `installer.cmd` rebuilds the setup program. It requires Inno Setup 6:
 
@@ -73,15 +74,15 @@ The installer is unsigned, so Windows SmartScreen may show a warning on first la
 
 ## Usage
 
-1. Start the app. It lives in the system tray.
-2. Press **Ctrl+Alt+S** or use the tray menu.
+1. Start the app. It opens a small main window and also lives in the system tray.
+2. Click **Capture region** or **Capture full screen**, press **Ctrl+Alt+S**, or use the tray menu.
 3. Wait for the countdown.
-4. Drag to select a region, or choose **Capture full screen** from the tray.
+4. Drag to select a region, or let the full-screen capture finish.
 5. Use the preview toast to copy, save, or discard.
 6. Press **Esc** or right-click to cancel the selection.
 7. Press the global hotkey again during the countdown or selection to cancel.
 
-Double-clicking the tray icon starts a region capture.
+Closing the main window leaves the app running in the system tray. Double-click the tray icon, or choose **Open Disposable Screenshots** from its menu, to bring the window back.
 
 ### Testing without a mouse
 
@@ -93,6 +94,8 @@ The app accepts two command-line arguments for smoke testing:
 ```
 
 These still use the configured countdown. They are intended for development and automation, not as a general CLI interface.
+
+`--tray` starts the app without showing the main window. The Windows startup entry uses this flag.
 
 ## Settings
 

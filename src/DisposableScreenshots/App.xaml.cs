@@ -21,6 +21,7 @@ public partial class App : Application
     private SettingsService? _settingsService;
     private CaptureCoordinator? _capture;
     private AppSettings? _settings;
+    private MainWindow? _mainWindow;
     private SettingsWindow? _settingsWindow;
     private bool _exiting;
 
@@ -69,10 +70,35 @@ public partial class App : Application
             var autoCapture = e.Args.Any(argument =>
                 string.Equals(argument, "--capture", StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(argument, "--capture-full", StringComparison.OrdinalIgnoreCase));
+            var startInTray = e.Args.Any(argument =>
+                string.Equals(argument, "--tray", StringComparison.OrdinalIgnoreCase));
+            var showMainWindow = !autoCapture && !startInTray;
+            AppLog.Info($"Startup args: {string.Join(' ', e.Args)}; showMainWindow={showMainWindow}.");
 
-            if (IsDev && !autoCapture)
+            if (showMainWindow)
             {
-                ShowSettings();
+                ShowMainWindow();
+            }
+
+            if (_settings is not null && _settings.ShowFirstRunTip)
+            {
+                _settings.ShowFirstRunTip = false;
+
+                try
+                {
+                    _settingsService.Save(_settings);
+                }
+                catch (Exception exception)
+                {
+                    AppLog.Error("Could not save first-run state", exception);
+                }
+
+                if (!showMainWindow)
+                {
+                    _tray?.ShowInfo(
+                        "Disposable Screenshots",
+                        $"Running in the tray. Press {HotkeyDefinition.Parse(_settings.Hotkey)} to capture.");
+                }
             }
 
             if (e.Args.Any(argument => string.Equals(argument, "--capture-full", StringComparison.OrdinalIgnoreCase)))
@@ -104,6 +130,7 @@ public partial class App : Application
         }
 
         _tray = new TrayService(_settings);
+        _tray.OpenRequested += (_, _) => ShowMainWindow();
         _tray.CaptureRegionRequested += (_, _) => BeginCapture(CaptureMode.Region);
         _tray.CaptureFullScreenRequested += (_, _) => BeginCapture(CaptureMode.FullScreen);
         _tray.SettingsRequested += (_, _) => ShowSettings();
@@ -132,24 +159,6 @@ public partial class App : Application
                 _tray?.ShowWarning("Settings", "Could not save the delay setting.");
             }
         };
-
-        if (_settings.ShowFirstRunTip)
-        {
-            _settings.ShowFirstRunTip = false;
-
-            try
-            {
-                _settingsService?.Save(_settings);
-            }
-            catch (Exception exception)
-            {
-                AppLog.Error("Could not save first-run state", exception);
-            }
-
-            _tray.ShowInfo(
-                "Disposable Screenshots",
-                $"Running in the tray. Press {HotkeyDefinition.Parse(_settings.Hotkey)} to capture.");
-        }
     }
 
     private void BuildHotkey()
@@ -194,6 +203,12 @@ public partial class App : Application
             return;
         }
 
+        var restoreMainWindow = _mainWindow is { IsVisible: true };
+        if (restoreMainWindow)
+        {
+            _mainWindow?.Hide();
+        }
+
         try
         {
             await _capture.StartAsync(mode);
@@ -207,6 +222,44 @@ public partial class App : Application
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
+        finally
+        {
+            if (restoreMainWindow && _mainWindow is not null)
+            {
+                _mainWindow.Show();
+                _mainWindow.Activate();
+            }
+        }
+    }
+
+    private void ShowMainWindow()
+    {
+        if (_settings is null)
+        {
+            AppLog.Info("ShowMainWindow skipped: settings are not loaded.");
+            return;
+        }
+
+        if (_mainWindow is { IsVisible: true })
+        {
+            _mainWindow.Activate();
+            return;
+        }
+
+        if (_mainWindow is null)
+        {
+            AppLog.Info("Creating main window.");
+            _mainWindow = new MainWindow(_settings, IsDev);
+            _mainWindow.CaptureRegionRequested += (_, _) => BeginCapture(CaptureMode.Region);
+            _mainWindow.CaptureFullScreenRequested += (_, _) => BeginCapture(CaptureMode.FullScreen);
+            _mainWindow.SettingsRequested += (_, _) => ShowSettings();
+            _mainWindow.ExitRequested += (_, _) => Shutdown();
+            _mainWindow.Closed += (_, _) => _mainWindow = null;
+        }
+
+        _mainWindow.Show();
+        _mainWindow.Activate();
+        AppLog.Info($"Main window shown: visible={_mainWindow.IsVisible}, handle={new System.Windows.Interop.WindowInteropHelper(_mainWindow).Handle}.");
     }
 
     private void ShowSettings()

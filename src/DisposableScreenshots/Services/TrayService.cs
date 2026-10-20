@@ -18,15 +18,17 @@ public sealed class TrayService : IDisposable
         _selectedDelay = settings.DelaySeconds;
         _icon = new TaskbarIcon
         {
-            ToolTipText = "Disposable Screenshots",
+            ToolTipText = "Disposable Screenshots - double-click to open",
             Icon = LoadIcon(),
             MenuActivation = PopupActivationMode.RightClick,
             ContextMenu = BuildMenu(settings)
         };
 
-        _icon.TrayLeftMouseDoubleClick += (_, _) => CaptureRegionRequested?.Invoke(this, EventArgs.Empty);
+        _icon.TrayLeftMouseDoubleClick += (_, _) => OpenRequested?.Invoke(this, EventArgs.Empty);
         _icon.ForceCreate();
     }
+
+    public event EventHandler? OpenRequested;
 
     public event EventHandler? CaptureRegionRequested;
 
@@ -79,6 +81,15 @@ public sealed class TrayService : IDisposable
 
         var menu = new ContextMenu();
         var hotkey = HotkeyDefinition.Parse(settings.Hotkey);
+
+        var openItem = new MenuItem
+        {
+            Header = "Open Disposable Screenshots",
+            FontWeight = FontWeights.SemiBold
+        };
+        openItem.Click += (_, _) => OpenRequested?.Invoke(this, EventArgs.Empty);
+        menu.Items.Add(openItem);
+        menu.Items.Add(new Separator());
 
         var captureRegion = new MenuItem
         {

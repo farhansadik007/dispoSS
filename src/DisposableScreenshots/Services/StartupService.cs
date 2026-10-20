@@ -35,6 +35,6 @@ public static class StartupService
             throw new InvalidOperationException("The application path could not be determined.");
         }
 
-        key.SetValue(ValueName, $"\"{executable}\"", RegistryValueKind.String);
+        key.SetValue(ValueName, $"\"{executable}\" --tray", RegistryValueKind.String);
     }
 }
