@@ -35,6 +35,7 @@ From the repository root:
 .\build.cmd      # Debug build
 .\dev.cmd        # dotnet watch with hot reload and dev settings
 .\publish.cmd    # Self-contained single-file build in dist\win-x64
+.\installer.cmd  # Build the Windows installer in dist
 ```
 
 `dotnet watch` hot-reloads C# changes. XAML changes trigger a rebuild and app restart rather than a live visual refresh.
@@ -44,6 +45,31 @@ The published executable is:
 ```text
 dist\win-x64\DisposableScreenshots.exe
 ```
+
+## Install
+
+Run the setup program:
+
+```text
+dist\DisposableScreenshots-Setup.exe
+```
+
+It installs per user, so no administrator rights are required. The default location is:
+
+```text
+%LOCALAPPDATA%\Programs\Disposable Screenshots
+```
+
+The installer adds a Start Menu shortcut and can optionally add a desktop shortcut. After installation the app starts from the Start Menu and lives in the system tray. To remove it, use **Settings > Apps > Installed apps**, or run the uninstaller in the install folder.
+
+`installer.cmd` rebuilds the setup program. It requires Inno Setup 6:
+
+```powershell
+winget install JRSoftware.InnoSetup
+.\installer.cmd
+```
+
+The installer is unsigned, so Windows SmartScreen may show a warning on first launch. Choose **More info > Run anyway** if you built it yourself. A code-signing certificate would remove that warning for distribution.
 
 ## Usage
 
@@ -139,7 +165,7 @@ Important implementation files:
 - The global hotkey is not editable from the UI yet.
 - Region selection does not span multiple monitors.
 - No annotation, scrolling capture, OCR, or history.
-- No installer yet; `publish.cmd` produces a portable self-contained build.
+- The installer is unsigned. Windows SmartScreen may warn when it is downloaded or launched on another machine.
 - Real mouse/keyboard interaction must be tested on an unlocked desktop. The app cannot receive local input while Windows is showing the lock screen.
 - `dotnet watch` restarts on XAML changes instead of doing true live XAML reload.
 
