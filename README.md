@@ -8,7 +8,7 @@ Built with **C# / WPF on .NET 10** — no Electron, no browser, no background cl
 
 ## Features
 
-- Visible main window with **Capture region** and **Capture full screen** buttons
+- Visible main window with **Capture region**, **Capture full screen**, and **Settings** buttons
 - Global hotkey: **Ctrl+Alt+S**
 - Countdown timer before the screen is frozen (default 3 seconds)
 - Region capture on the monitor where you start the capture
@@ -61,7 +61,7 @@ It installs per user, so no administrator rights are required. The default locat
 %LOCALAPPDATA%\Programs\Disposable Screenshots
 ```
 
-The installer adds a Start Menu shortcut and a desktop shortcut by default. After installation the app opens its main window and also lives in the system tray. To remove it, use **Settings > Apps > Installed apps**, or run the uninstaller in the install folder.
+The installer adds a Start Menu shortcut and a desktop shortcut by default. If the app is already running, setup closes it and continues. After installation the app opens its main window and also lives in the system tray. To remove it, use **Settings > Apps > Installed apps**, or run the uninstaller in the install folder.
 
 `installer.cmd` rebuilds the setup program. It requires Inno Setup 6:
 
@@ -82,7 +82,7 @@ The installer is unsigned, so Windows SmartScreen may show a warning on first la
 6. Press **Esc** or right-click to cancel the selection.
 7. Press the global hotkey again during the countdown or selection to cancel.
 
-Closing the main window leaves the app running in the system tray. Double-click the tray icon, or choose **Open Disposable Screenshots** from its menu, to bring the window back.
+Closing the main window leaves the app running in the system tray. Double-click the tray icon, choose **Open Disposable Screenshots** from its menu, or launch the desktop/Start Menu shortcut again to bring the window back. Launching the shortcut while the app is running activates the existing window instead of starting a duplicate.
 
 ### Testing without a mouse
 
@@ -117,6 +117,8 @@ Logs are written to:
 %LOCALAPPDATA%\DisposableScreenshots\app.log
 ```
 
+Open the main window and click **Settings** at the bottom of the window, or use **Settings** in the tray menu.
+
 The settings window controls:
 
 - Countdown delay
@@ -133,7 +135,7 @@ The capture flow is deliberately simple:
 
 1. The countdown runs before touching the screen, so menus and hover states can settle.
 2. A GDI snapshot of the virtual desktop is taken once.
-3. A transparent, topmost overlay is created per monitor using that frozen snapshot.
+3. An opaque, topmost overlay is created per monitor using that frozen snapshot. The snapshot is a separate layer from the selection canvas, so moving the mouse does not repaint the full screenshot.
 4. The selection rectangle is mapped from overlay DIPs back to physical pixels.
 5. The frozen image is cropped and optionally copied to the clipboard.
 6. The preview window holds the image in memory until it closes or you save it.
@@ -158,7 +160,7 @@ Important implementation files:
 
 - The desktop is frozen **after** the countdown. The countdown itself is not part of the screenshot.
 - Region selection is intentionally limited to one monitor at a time in this version. Full-screen capture spans all monitors.
-- The app is single-instance. Launching a second copy shows a short message and exits.
+- The app is single-instance. Launching a second copy activates the existing window and exits.
 - The app is per-monitor DPI aware (`PerMonitorV2`).
 - The clipboard auto-clear timer only clears the clipboard if the custom marker data is still present. If you copied something else in the meantime, it leaves your clipboard alone.
 - WPF-UI supplies the dark theme and control styling. The overlay, countdown, and preview are custom-drawn/positioned for tight control over capture behavior.

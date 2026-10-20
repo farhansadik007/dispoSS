@@ -4,8 +4,7 @@
         xmlns:local="clr-namespace:DisposableScreenshots.Views"
         Title="Select a region"
         WindowStyle="None"
-        AllowsTransparency="True"
-        Background="Transparent"
+        Background="Black"
         Topmost="True"
         ShowInTaskbar="False"
         ShowActivated="True"
@@ -13,6 +12,7 @@
         WindowStartupLocation="Manual"
         Focusable="True">
     <Grid Background="Transparent">
+        <Image x:Name="SnapshotImage" Stretch="Fill" SnapsToDevicePixels="True" />
         <local:SelectionCanvas x:Name="SelectionSurface" />
     </Grid>
 </Window>

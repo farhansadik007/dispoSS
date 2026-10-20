@@ -19,7 +19,7 @@ public partial class CaptureOverlayWindow : Window
         Width = monitor.Width / Math.Max(0.1, monitor.ScaleX);
         Height = monitor.Height / Math.Max(0.1, monitor.ScaleY);
 
-        SelectionSurface.Snapshot = monitorImage;
+        SnapshotImage.Source = monitorImage;
         SelectionSurface.SelectionCompleted += OnSelectionCompleted;
         SelectionSurface.CancelRequested += (_, _) => Cancelled?.Invoke(this, EventArgs.Empty);
         SourceInitialized += OnSourceInitialized;

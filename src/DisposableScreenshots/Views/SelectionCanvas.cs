@@ -30,8 +30,6 @@ public sealed class SelectionCanvas : FrameworkElement
         UseLayoutRounding = true;
     }
 
-    public ImageSource? Snapshot { get; set; }
-
     public double PixelScaleX { get; set; } = 1.0;
 
     public double PixelScaleY { get; set; } = 1.0;
@@ -50,11 +48,6 @@ public sealed class SelectionCanvas : FrameworkElement
 
         var bounds = new Rect(0, 0, ActualWidth, ActualHeight);
         drawingContext.DrawRectangle(Brushes.Transparent, null, bounds);
-
-        if (Snapshot is not null)
-        {
-            drawingContext.DrawImage(Snapshot, bounds);
-        }
 
         if (HasSelection)
         {
@@ -114,8 +107,7 @@ public sealed class SelectionCanvas : FrameworkElement
 
         if (_dragging)
         {
-            var current = Clamp(e.GetPosition(this));
-            Selection = Normalize(_dragStart, current);
+            Selection = Normalize(_dragStart, _cursor.Value);
         }
 
         InvalidateVisual();

@@ -12,9 +12,12 @@ namespace DisposableScreenshots;
 public partial class App : Application
 {
     private const string MutexName = @"Local\DisposableScreenshots.SingleInstance";
+    private const string ShowWindowEventName = @"Local\DisposableScreenshots.ShowWindow";
 
     private Mutex? _singleInstance;
     private bool _ownsMutex;
+    private EventWaitHandle? _showWindowEvent;
+    private CancellationTokenSource? _showWindowListener;
     private TrayService? _tray;
     private HotkeyService? _hotkey;
     private ClipboardService? _clipboard;
@@ -46,14 +49,12 @@ public partial class App : Application
 
         if (!createdNew)
         {
-            MessageBox.Show(
-                "Disposable Screenshots is already running in the system tray.",
-                "Disposable Screenshots",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            SignalExistingInstance();
             Shutdown();
             return;
         }
+
+        StartShowWindowListener();
 
         try
         {
@@ -120,6 +121,86 @@ public partial class App : Application
                 MessageBoxImage.Error);
             Shutdown();
         }
+    }
+
+    private static void SignalExistingInstance()
+    {
+        for (var attempt = 0; attempt < 10; attempt++)
+        {
+            try
+            {
+                if (EventWaitHandle.TryOpenExisting(ShowWindowEventName, out var handle))
+                {
+                    using (handle)
+                    {
+                        handle.Set();
+                    }
+
+                    return;
+                }
+            }
+            catch (Exception exception)
+            {
+                AppLog.Error("Could not signal the running instance", exception);
+                break;
+            }
+
+            Thread.Sleep(100);
+        }
+
+        MessageBox.Show(
+            "Disposable Screenshots is already running. Open it from the system tray.",
+            "Disposable Screenshots",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
+    private void StartShowWindowListener()
+    {
+        _showWindowEvent = new EventWaitHandle(false, EventResetMode.AutoReset, ShowWindowEventName);
+        _showWindowListener = new CancellationTokenSource();
+        var token = _showWindowListener.Token;
+        var showWindowEvent = _showWindowEvent;
+
+        _ = Task.Run(
+            () =>
+            {
+                try
+                {
+                    var handles = new WaitHandle[] { showWindowEvent, token.WaitHandle };
+
+                    while (!token.IsCancellationRequested)
+                    {
+                        var index = WaitHandle.WaitAny(handles);
+                        if (index != 0)
+                        {
+                            break;
+                        }
+
+                        try
+                        {
+                            Dispatcher.BeginInvoke(() =>
+                            {
+                                AppLog.Info("Another launch requested the main window.");
+                                ShowMainWindow();
+                            });
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            break;
+                        }
+                    }
+                }
+                catch (ObjectDisposedException)
+                {
+                    // The app is shutting down.
+                }
+                catch (Exception exception)
+                {
+                    AppLog.Error("Main window listener failed", exception);
+                }
+            },
+            token);
     }
 
     private void BuildTray()
@@ -346,6 +427,9 @@ public partial class App : Application
         _hotkey?.Dispose();
         _clipboard?.Dispose();
         _capture?.Dispose();
+        _showWindowListener?.Cancel();
+        _showWindowEvent?.Dispose();
+        _showWindowListener?.Dispose();
 
         if (_ownsMutex)
         {
