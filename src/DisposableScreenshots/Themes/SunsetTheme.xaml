@@ -422,13 +422,10 @@
                                                 Style="{StaticResource RetroWindowButton}"
                                                 Margin="0,0,6,0"
                                                 ToolTip="Settings">
-                                            <Canvas Width="14" Height="14">
-                                                <Rectangle Canvas.Left="0" Canvas.Top="2" Width="14" Height="2" Fill="{StaticResource NavyBrush}" />
-                                                <Rectangle Canvas.Left="2" Canvas.Top="0" Width="4" Height="6" Fill="{StaticResource CreamLightBrush}" Stroke="{StaticResource NavyBrush}" StrokeThickness="1" />
-                                                <Rectangle Canvas.Left="0" Canvas.Top="6" Width="14" Height="2" Fill="{StaticResource NavyBrush}" />
-                                                <Rectangle Canvas.Left="9" Canvas.Top="4" Width="4" Height="6" Fill="{StaticResource CreamLightBrush}" Stroke="{StaticResource NavyBrush}" StrokeThickness="1" />
-                                                <Rectangle Canvas.Left="0" Canvas.Top="10" Width="14" Height="2" Fill="{StaticResource NavyBrush}" />
-                                                <Rectangle Canvas.Left="5" Canvas.Top="8" Width="4" Height="6" Fill="{StaticResource CreamLightBrush}" Stroke="{StaticResource NavyBrush}" StrokeThickness="1" />
+                                            <Canvas Width="16" Height="16"
+                                                    RenderOptions.EdgeMode="Aliased">
+                                                <Path Fill="{StaticResource NavyBrush}"
+                                                      Data="F0 M6.01,3.2 L6.78,1.11 L9.22,1.11 L9.99,3.2 L12.02,2.27 L13.73,3.98 L12.8,6.01 L14.89,6.78 L14.89,9.22 L12.8,9.99 L13.73,12.02 L12.02,13.73 L9.99,12.8 L9.22,14.89 L6.78,14.89 L6.01,12.8 L3.98,13.73 L2.27,12.02 L3.2,9.99 L1.11,9.22 L1.11,6.78 L3.2,6.01 L2.27,3.98 L3.98,2.27 Z M10.03,8.84 L8.84,10.03 L7.16,10.03 L5.97,8.84 L5.97,7.16 L7.16,5.97 L8.84,5.97 L10.03,7.16 Z" />
                                             </Canvas>
                                         </Button>
                                         <Button x:Name="PART_CloseButton"
