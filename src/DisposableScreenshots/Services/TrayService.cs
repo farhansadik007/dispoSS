@@ -18,7 +18,7 @@ public sealed class TrayService : IDisposable
         _selectedDelay = settings.DelaySeconds;
         _icon = new TaskbarIcon
         {
-            ToolTipText = "Snipt - double-click to open",
+            ToolTipText = "dispoSS - double-click to open",
             Icon = LoadIcon(),
             MenuActivation = PopupActivationMode.RightClick,
             ContextMenu = BuildMenu(settings)
@@ -84,7 +84,7 @@ public sealed class TrayService : IDisposable
 
         var openItem = new MenuItem
         {
-            Header = "Open Snipt",
+            Header = "Open dispoSS",
             FontWeight = FontWeights.SemiBold
         };
         openItem.Click += (_, _) => OpenRequested?.Invoke(this, EventArgs.Empty);

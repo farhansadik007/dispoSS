@@ -14,22 +14,34 @@ public sealed class SettingsService
     public SettingsService(bool isDev)
     {
         var root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        var folder = isDev ? "Snipt-dev" : "Snipt";
+        var folder = isDev ? "dispoSS-dev" : "dispoSS";
         SettingsPath = Path.Combine(root, folder, "settings.json");
 
-        var legacyFolder = isDev ? "DisposableScreenshots-dev" : "DisposableScreenshots";
-        LegacySettingsPath = Path.Combine(root, legacyFolder, "settings.json");
+        var legacyFolders = isDev
+            ? new[] { "Snipt-dev", "DisposableScreenshots-dev" }
+            : new[] { "Snipt", "DisposableScreenshots" };
+        LegacySettingsPaths = legacyFolders
+            .Select(legacyFolder => Path.Combine(root, legacyFolder, "settings.json"))
+            .ToArray();
     }
 
     public string SettingsPath { get; }
 
-    private string LegacySettingsPath { get; }
+    private string[] LegacySettingsPaths { get; }
 
     public Models.AppSettings Load()
     {
         try
         {
-            var path = File.Exists(SettingsPath) ? SettingsPath : LegacySettingsPath;
+            var path = SettingsPath;
+            foreach (var legacyPath in LegacySettingsPaths)
+            {
+                if (!File.Exists(path) && File.Exists(legacyPath))
+                {
+                    path = legacyPath;
+                }
+            }
+
             if (!File.Exists(path))
             {
                 return new Models.AppSettings();

@@ -1,4 +1,4 @@
-# Snipt
+# dispoSS
 
 A tiny native Windows screenshot utility for quick, throwaway captures.
 
@@ -44,7 +44,7 @@ From the repository root:
 The published executable is:
 
 ```text
-dist\win-x64\Snipt.exe
+dist\win-x64\dispoSS.exe
 ```
 
 ## Install
@@ -52,13 +52,13 @@ dist\win-x64\Snipt.exe
 Run the setup program:
 
 ```text
-dist\Snipt-Setup.exe
+dist\dispoSS-Setup.exe
 ```
 
 It installs per user, so no administrator rights are required. The default location is:
 
 ```text
-%LOCALAPPDATA%\Programs\Snipt
+%LOCALAPPDATA%\Programs\dispoSS
 ```
 
 The installer adds a Start Menu shortcut and a desktop shortcut by default. If the app is already running, setup closes it and continues. After installation the app opens its main window and also lives in the system tray. To remove it, use **Settings > Apps > Installed apps**, or run the uninstaller in the install folder.
@@ -82,15 +82,15 @@ The installer is unsigned, so Windows SmartScreen may show a warning on first la
 6. Press **Esc** or right-click to cancel the selection.
 7. Press the global hotkey again during the countdown or selection to cancel.
 
-Closing the main window leaves the app running in the system tray. Double-click the tray icon, choose **Open Snipt** from its menu, or launch the desktop/Start Menu shortcut again to bring the window back. Launching the shortcut while the app is running activates the existing window instead of starting a duplicate.
+Closing the main window leaves the app running in the system tray. Double-click the tray icon, choose **Open dispoSS** from its menu, or launch the desktop/Start Menu shortcut again to bring the window back. Launching the shortcut while the app is running activates the existing window instead of starting a duplicate.
 
 ### Testing without a mouse
 
 The app accepts two command-line arguments for smoke testing:
 
 ```powershell
-.\src\DisposableScreenshots\bin\Debug\net48\Snipt.exe --capture
-.\src\DisposableScreenshots\bin\Debug\net48\Snipt.exe --capture-full
+.\src\DisposableScreenshots\bin\Debug\net48\dispoSS.exe --capture
+.\src\DisposableScreenshots\bin\Debug\net48\dispoSS.exe --capture-full
 ```
 
 These still use the configured countdown. They are intended for development and automation, not as a general CLI interface.
@@ -102,19 +102,19 @@ These still use the configured countdown. They are intended for development and 
 Settings are stored in:
 
 ```text
-%APPDATA%\Snipt\settings.json
+%APPDATA%\dispoSS\settings.json
 ```
 
 Dev mode uses a separate file:
 
 ```text
-%APPDATA%\Snipt-dev\settings.json
+%APPDATA%\dispoSS-dev\settings.json
 ```
 
 Logs are written to:
 
 ```text
-%LOCALAPPDATA%\Snipt\app.log
+%LOCALAPPDATA%\dispoSS\app.log
 ```
 
 Open the main window and click **Settings** at the bottom of the window, or use **Settings** in the tray menu.
@@ -186,4 +186,4 @@ Important implementation files:
 
 ## Privacy
 
-Snipt does not contain networking code. Captures remain in memory and, if you choose, on the clipboard or in a file you explicitly save.
+dispoSS does not contain networking code. Captures remain in memory and, if you choose, on the clipboard or in a file you explicitly save.

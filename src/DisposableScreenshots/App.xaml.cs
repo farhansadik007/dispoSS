@@ -9,8 +9,8 @@ namespace DisposableScreenshots;
 
 public partial class App : Application
 {
-    private const string MutexName = @"Local\Snipt.SingleInstance";
-    private const string ShowWindowEventName = @"Local\Snipt.ShowWindow";
+    private const string MutexName = @"Local\dispoSS.SingleInstance";
+    private const string ShowWindowEventName = @"Local\dispoSS.ShowWindow";
 
     private Mutex? _singleInstance;
     private bool _ownsMutex;
@@ -26,7 +26,7 @@ public partial class App : Application
     private bool _exiting;
 
     public static bool IsDev { get; } =
-        string.Equals(Environment.GetEnvironmentVariable("SNIPT_DEV"), "1", StringComparison.Ordinal);
+        string.Equals(Environment.GetEnvironmentVariable("DISPOS_DEV"), "1", StringComparison.Ordinal);
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -105,7 +105,7 @@ public partial class App : Application
                 if (!showMainWindow)
                 {
                     _tray?.ShowInfo(
-                        "Snipt",
+                        "dispoSS",
                         $"Running in the tray. Press {HotkeyDefinition.Parse(_settings.Hotkey)} to capture.");
                 }
             }
@@ -123,7 +123,7 @@ public partial class App : Application
         {
             AppLog.Error("Startup failed", exception);
             MessageBox.Show(
-                $"Snipt could not start.\n\n{exception.Message}",
+                $"dispoSS could not start.\n\n{exception.Message}",
                 "Startup error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
@@ -157,8 +157,8 @@ public partial class App : Application
         }
 
         MessageBox.Show(
-            "Snipt is already running. Open it from the system tray.",
-            "Snipt",
+            "dispoSS is already running. Open it from the system tray.",
+            "dispoSS",
             MessageBoxButton.OK,
             MessageBoxImage.Information);
     }
@@ -408,7 +408,7 @@ public partial class App : Application
         e.Handled = true;
         MessageBox.Show(
             $"Something went wrong.\n\n{e.Exception.Message}",
-            "Snipt",
+            "dispoSS",
             MessageBoxButton.OK,
             MessageBoxImage.Error);
     }

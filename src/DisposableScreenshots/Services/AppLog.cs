@@ -8,7 +8,7 @@ public static class AppLog
     private static readonly object Gate = new();
     private static readonly string LogPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "Snipt",
+        "dispoSS",
         "app.log");
 
     public static void Info(string message) => Write("INFO", message, null);

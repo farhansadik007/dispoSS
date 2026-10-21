@@ -6,8 +6,8 @@ namespace DisposableScreenshots.Services;
 public static class StartupService
 {
     private const string RunKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
-    private const string ValueName = "Snipt";
-    private const string LegacyValueName = "DisposableScreenshots";
+    private const string ValueName = "dispoSS";
+    private static readonly string[] LegacyValueNames = { "Snipt", "DisposableScreenshots" };
 
     public static bool IsEnabled()
     {
@@ -20,7 +20,10 @@ public static class StartupService
         using var key = Registry.CurrentUser.OpenSubKey(RunKeyPath, true)
                         ?? Registry.CurrentUser.CreateSubKey(RunKeyPath, true);
 
-        key.DeleteValue(LegacyValueName, false);
+        foreach (var legacyName in LegacyValueNames)
+        {
+            key.DeleteValue(legacyName, false);
+        }
 
         if (!enabled)
         {
@@ -34,13 +37,25 @@ public static class StartupService
     public static void MigrateLegacyEntry()
     {
         using var key = Registry.CurrentUser.OpenSubKey(RunKeyPath, true);
-        if (key?.GetValue(LegacyValueName) is not string legacy || string.IsNullOrWhiteSpace(legacy))
+        if (key is null)
         {
             return;
         }
 
-        key.SetValue(ValueName, $"\"{GetExecutablePath()}\" --tray", RegistryValueKind.String);
-        key.DeleteValue(LegacyValueName, false);
+        var hadLegacyEntry = false;
+        foreach (var legacyName in LegacyValueNames)
+        {
+            if (key.GetValue(legacyName) is string value && !string.IsNullOrWhiteSpace(value))
+            {
+                hadLegacyEntry = true;
+                key.DeleteValue(legacyName, false);
+            }
+        }
+
+        if (hadLegacyEntry)
+        {
+            key.SetValue(ValueName, $"\"{GetExecutablePath()}\" --tray", RegistryValueKind.String);
+        }
     }
 
     private static string GetExecutablePath()

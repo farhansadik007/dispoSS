@@ -20,7 +20,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        Title = isDev ? "Snipt (dev)" : "Snipt";
+        Title = isDev ? "dispoSS (dev)" : "dispoSS";
         HotkeyText.Text = HotkeyDefinition.Parse(settings.Hotkey).ToString();
 
         var version = Assembly.GetExecutingAssembly().GetName().Version;

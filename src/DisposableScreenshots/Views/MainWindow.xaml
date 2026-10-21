@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:DisposableScreenshots.Controls"
-        Title="Snipt"
+        Title="dispoSS"
         Width="620"
         SizeToContent="Height"
         ResizeMode="NoResize"
@@ -18,7 +18,7 @@
         TextOptions.TextFormattingMode="Display"
         SourceInitialized="OnSourceInitialized"
         PreviewKeyDown="OnPreviewKeyDown">
-    <controls:RetroFrame Title="SNIPT"
+    <controls:RetroFrame Title="dispoSS"
                          Style="{StaticResource RetroFrameStyle}"
                          SettingsRequested="SettingsButton_Click">
         <Grid x:Name="ViewHost"
@@ -44,20 +44,14 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel VerticalAlignment="Center">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="SNIPT"
-                                           FontFamily="{StaticResource TitleFont}"
-                                           FontSize="42"
-                                           Foreground="{StaticResource NavyBrush}"
-                                           TextOptions.TextFormattingMode="Display"
-                                           TextOptions.TextRenderingMode="Aliased" />
-                                <TextBlock Text="?"
-                                           FontFamily="{StaticResource TitleFont}"
-                                           FontSize="42"
-                                           Foreground="{StaticResource CoralBrush}"
-                                           TextOptions.TextFormattingMode="Display"
-                                           TextOptions.TextRenderingMode="Aliased" />
-                            </StackPanel>
+                            <TextBlock AutomationProperties.Name="dispoSS"
+                                       FontFamily="{StaticResource TitleFont}"
+                                       FontSize="42"
+                                       Foreground="{StaticResource NavyBrush}"
+                                       TextOptions.TextFormattingMode="Display"
+                                       TextOptions.TextRenderingMode="Aliased">
+                                <Run Text="D" /><Run Text="ISPO" FontSize="30" /><Run Text="SS" /><Run Text="?" Foreground="{StaticResource CoralBrush}" />
+                            </TextBlock>
                             <TextBlock Text="QUICK. PRIVATE. GONE."
                                        Margin="2,8,0,0"
                                        FontSize="11"
