@@ -63,32 +63,15 @@
                                 Width="150"
                                 Height="94"
                                 Margin="18,0,0,0"
-                                ClipToBounds="True"
                                 VerticalAlignment="Center">
-                            <Ellipse Canvas.Left="-12"
-                                     Canvas.Top="34"
-                                     Width="174"
-                                     Height="174"
-                                     Stroke="{StaticResource TealBrush}"
-                                     StrokeThickness="16" />
-                            <Ellipse Canvas.Left="8"
-                                     Canvas.Top="54"
-                                     Width="134"
-                                     Height="134"
-                                     Stroke="{StaticResource SeafoamBrush}"
-                                     StrokeThickness="16" />
-                            <Ellipse Canvas.Left="28"
-                                     Canvas.Top="74"
-                                     Width="94"
-                                     Height="94"
-                                     Stroke="{StaticResource PeachBrush}"
-                                     StrokeThickness="16" />
-                            <Ellipse Canvas.Left="48"
-                                     Canvas.Top="94"
-                                     Width="54"
-                                     Height="54"
-                                     Stroke="{StaticResource CoralBrush}"
-                                     StrokeThickness="16" />
+                            <Image Canvas.Left="35"
+                                   Canvas.Top="1"
+                                   Width="80"
+                                   Height="92"
+                                   Source="/Assets/trash-can.png"
+                                   Stretch="None"
+                                   RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                   SnapsToDevicePixels="True" />
                         </Canvas>
                     </Grid>
 
