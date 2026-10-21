@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <Resource Include="Assets\app.ico" />
+    <Resource Include="Assets\home-backdrop.png" />
     <Resource Include="Assets\Fonts\*.ttf" />
     <Resource Include="Assets\Fonts\PixelOperator-CC0.txt" />
     <Watch Include="**\*.xaml" />

@@ -28,6 +28,23 @@
                 <Grid.RenderTransform>
                     <TranslateTransform x:Name="CaptureTranslate" />
                 </Grid.RenderTransform>
+
+                <Border IsHitTestVisible="False"
+                        CornerRadius="13"
+                        RenderOptions.BitmapScalingMode="NearestNeighbor"
+                        RenderOptions.EdgeMode="Aliased">
+                    <Border.Effect>
+                        <BlurEffect Radius="6"
+                                    KernelType="Gaussian"
+                                    RenderingBias="Quality" />
+                    </Border.Effect>
+                    <Border.Background>
+                        <ImageBrush ImageSource="/Assets/home-backdrop.png"
+                                    Stretch="UniformToFill"
+                                    Opacity="0.9" />
+                    </Border.Background>
+                </Border>
+
                 <Grid Margin="24,22,24,22">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -47,7 +64,7 @@
                             <TextBlock AutomationProperties.Name="dispoSS"
                                        FontFamily="{StaticResource TitleFont}"
                                        FontSize="42"
-                                       Foreground="{StaticResource NavyBrush}"
+                                       Foreground="{StaticResource CreamLightBrush}"
                                        TextOptions.TextFormattingMode="Display"
                                        TextOptions.TextRenderingMode="Aliased">
                                 <Run Text="D" /><Run Text="ISPO" FontSize="30" /><Run Text="SS" /><Run Text="?" Foreground="{StaticResource CoralBrush}" />
@@ -55,8 +72,8 @@
                             <TextBlock Text="QUICK. PRIVATE. GONE."
                                        Margin="2,8,0,0"
                                        FontSize="11"
-                                       Foreground="{StaticResource NavyBrush}"
-                                       Opacity="0.8" />
+                                       Foreground="{StaticResource CreamLightBrush}"
+                                       Opacity="0.85" />
                         </StackPanel>
 
                         <Canvas Grid.Column="1"
@@ -392,7 +409,8 @@
                     <TextBlock Grid.Row="3"
                                Text="THE WINDOW HIDES DURING A CAPTURE."
                                FontSize="10"
-                               Opacity="0.5"
+                               Foreground="{StaticResource CreamLightBrush}"
+                               Opacity="0.85"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
 
@@ -407,8 +425,8 @@
                         <TextBlock x:Name="VersionText"
                                    VerticalAlignment="Center"
                                    FontSize="10"
-                                   Foreground="{StaticResource NavyBrush}"
-                                   Opacity="0.55" />
+                                   Foreground="{StaticResource CreamLightBrush}"
+                                   Opacity="0.85" />
 
                         <Button Grid.Column="1"
                                 Content="SETTINGS"

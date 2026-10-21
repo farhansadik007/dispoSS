@@ -393,7 +393,7 @@
 
                                 <Grid x:Name="PART_TitleBar"
                                       Grid.Row="0"
-                                      Margin="14,0,10,0">
+                                      Margin="14,0,10,10">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
@@ -438,24 +438,6 @@
                                                   StrokeEndLineCap="Square" />
                                         </Button>
                                     </StackPanel>
-                                </Grid>
-
-                                <Grid Grid.Row="0"
-                                      Height="5"
-                                      Margin="10,0,10,0"
-                                      VerticalAlignment="Bottom">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Rectangle Grid.Column="0" Fill="{StaticResource TealBrush}" />
-                                    <Rectangle Grid.Column="1" Fill="{StaticResource SeafoamBrush}" />
-                                    <Rectangle Grid.Column="2" Fill="{StaticResource CreamBrush}" />
-                                    <Rectangle Grid.Column="3" Fill="{StaticResource CoralBrush}" />
-                                    <Rectangle Grid.Column="4" Fill="{StaticResource RedBrush}" />
                                 </Grid>
 
                                 <Border Grid.Row="1"
