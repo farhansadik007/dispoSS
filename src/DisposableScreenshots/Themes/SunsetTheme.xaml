@@ -3,6 +3,7 @@
                     xmlns:controls="clr-namespace:DisposableScreenshots.Controls">
 
     <FontFamily x:Key="PixelFont">pack://application:,,,/Assets/Fonts/#Silkscreen</FontFamily>
+    <FontFamily x:Key="TitleFont">pack://application:,,,/Assets/Fonts/#04b 30</FontFamily>
 
     <SolidColorBrush x:Key="NavyBrush" Color="#173A5E" />
     <SolidColorBrush x:Key="NavyDeepBrush" Color="#10263A" />

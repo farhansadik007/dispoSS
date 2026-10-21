@@ -7,7 +7,7 @@ namespace DisposableScreenshots.Services;
 
 public sealed class ClipboardService : IDisposable
 {
-    private const string MarkerFormat = "DisposableScreenshots.Image";
+    private const string MarkerFormat = "Snipt.Image";
 
     private DispatcherTimer? _clearTimer;
 

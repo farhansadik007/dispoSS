@@ -14,22 +14,28 @@ public sealed class SettingsService
     public SettingsService(bool isDev)
     {
         var root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        var folder = isDev ? "DisposableScreenshots-dev" : "DisposableScreenshots";
+        var folder = isDev ? "Snipt-dev" : "Snipt";
         SettingsPath = Path.Combine(root, folder, "settings.json");
+
+        var legacyFolder = isDev ? "DisposableScreenshots-dev" : "DisposableScreenshots";
+        LegacySettingsPath = Path.Combine(root, legacyFolder, "settings.json");
     }
 
     public string SettingsPath { get; }
+
+    private string LegacySettingsPath { get; }
 
     public Models.AppSettings Load()
     {
         try
         {
-            if (!File.Exists(SettingsPath))
+            var path = File.Exists(SettingsPath) ? SettingsPath : LegacySettingsPath;
+            if (!File.Exists(path))
             {
                 return new Models.AppSettings();
             }
 
-            var json = File.ReadAllText(SettingsPath, Encoding.UTF8);
+            var json = File.ReadAllText(path, Encoding.UTF8);
             var settings = JsonSerializer.Deserialize<Models.AppSettings>(json, JsonOptions) ?? new Models.AppSettings();
             settings.Normalize();
             return settings;

@@ -1,7 +1,7 @@
-#define MyAppName "Disposable Screenshots"
+#define MyAppName "Snipt"
 #define MyAppVersion "0.1.0"
-#define MyAppPublisher "Disposable Screenshots"
-#define MyAppExeName "DisposableScreenshots.exe"
+#define MyAppPublisher "Snipt"
+#define MyAppExeName "Snipt.exe"
 
 [Setup]
 AppId={{3EAC8426-473D-4767-954D-73451AF15357}
@@ -13,7 +13,7 @@ DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 OutputDir=dist
-OutputBaseFilename=DisposableScreenshots-Setup
+OutputBaseFilename=Snipt-Setup
 SetupIconFile=src\DisposableScreenshots\Assets\app.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2
@@ -61,7 +61,7 @@ begin
   Result := IsDotNet48Installed;
   if not Result then
   begin
-    MsgBox('Disposable Screenshots requires .NET Framework 4.8 or newer.' + #13#10 +
+    MsgBox('Snipt requires .NET Framework 4.8 or newer.' + #13#10 +
            'It is included with supported versions of Windows 10 and 11.', mbError, MB_OK);
   end;
 end;

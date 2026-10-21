@@ -19,12 +19,16 @@
         <StackPanel Grid.Row="0">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="SETTINGS"
+                           FontFamily="{StaticResource TitleFont}"
                            FontSize="26"
-                           FontWeight="Bold" />
+                           TextOptions.TextFormattingMode="Display"
+                           TextOptions.TextRenderingMode="Aliased" />
                 <TextBlock Text="?"
+                           FontFamily="{StaticResource TitleFont}"
                            FontSize="26"
-                           FontWeight="Bold"
-                           Foreground="{StaticResource CoralBrush}" />
+                           Foreground="{StaticResource CoralBrush}"
+                           TextOptions.TextFormattingMode="Display"
+                           TextOptions.TextRenderingMode="Aliased" />
             </StackPanel>
             <TextBlock Text="CHANGE THE CAPTURE FLOW."
                        Margin="1,5,0,0"

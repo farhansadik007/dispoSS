@@ -6,7 +6,8 @@ namespace DisposableScreenshots.Services;
 public static class StartupService
 {
     private const string RunKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
-    private const string ValueName = "DisposableScreenshots";
+    private const string ValueName = "Snipt";
+    private const string LegacyValueName = "DisposableScreenshots";
 
     public static bool IsEnabled()
     {
@@ -19,12 +20,31 @@ public static class StartupService
         using var key = Registry.CurrentUser.OpenSubKey(RunKeyPath, true)
                         ?? Registry.CurrentUser.CreateSubKey(RunKeyPath, true);
 
+        key.DeleteValue(LegacyValueName, false);
+
         if (!enabled)
         {
             key.DeleteValue(ValueName, false);
             return;
         }
 
+        key.SetValue(ValueName, $"\"{GetExecutablePath()}\" --tray", RegistryValueKind.String);
+    }
+
+    public static void MigrateLegacyEntry()
+    {
+        using var key = Registry.CurrentUser.OpenSubKey(RunKeyPath, true);
+        if (key?.GetValue(LegacyValueName) is not string legacy || string.IsNullOrWhiteSpace(legacy))
+        {
+            return;
+        }
+
+        key.SetValue(ValueName, $"\"{GetExecutablePath()}\" --tray", RegistryValueKind.String);
+        key.DeleteValue(LegacyValueName, false);
+    }
+
+    private static string GetExecutablePath()
+    {
         var executable = Process.GetCurrentProcess().MainModule?.FileName;
         if (string.IsNullOrWhiteSpace(executable))
         {
@@ -36,6 +56,6 @@ public static class StartupService
             throw new InvalidOperationException("The application path could not be determined.");
         }
 
-        key.SetValue(ValueName, $"\"{executable}\" --tray", RegistryValueKind.String);
+        return executable!;
     }
 }

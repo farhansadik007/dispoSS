@@ -14,7 +14,7 @@ if not defined ISCC (
   exit /b 1
 )
 
-if not exist "dist\win-x64\DisposableScreenshots.exe" (
+if not exist "dist\win-x64\Snipt.exe" (
   echo Published executable not found; running publish.cmd first.
   call "%~dp0publish.cmd"
   if errorlevel 1 exit /b %errorlevel%
@@ -24,5 +24,5 @@ if not exist "dist\win-x64\DisposableScreenshots.exe" (
 if errorlevel 1 exit /b %errorlevel%
 
 echo.
-echo Installer: %~dp0dist\DisposableScreenshots-Setup.exe
+echo Installer: %~dp0dist\Snipt-Setup.exe
 exit /b 0

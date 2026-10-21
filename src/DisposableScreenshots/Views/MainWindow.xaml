@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:DisposableScreenshots.Controls"
-        Title="Disposable Screenshots"
+        Title="Snipt"
         Width="620"
         SizeToContent="Height"
         ResizeMode="NoResize"
@@ -18,7 +18,7 @@
         TextOptions.TextFormattingMode="Display"
         SourceInitialized="OnSourceInitialized"
         PreviewKeyDown="OnPreviewKeyDown">
-    <controls:RetroFrame Title="DISPOSABLE SCREENSHOTS"
+    <controls:RetroFrame Title="SNIPT"
                          Style="{StaticResource RetroFrameStyle}"
                          SettingsRequested="SettingsButton_Click">
         <Grid x:Name="ViewHost"
@@ -45,14 +45,18 @@
 
                         <StackPanel VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="CAPTURE"
+                                <TextBlock Text="SNIPT"
+                                           FontFamily="{StaticResource TitleFont}"
                                            FontSize="42"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource NavyBrush}" />
+                                           Foreground="{StaticResource NavyBrush}"
+                                           TextOptions.TextFormattingMode="Display"
+                                           TextOptions.TextRenderingMode="Aliased" />
                                 <TextBlock Text="?"
+                                           FontFamily="{StaticResource TitleFont}"
                                            FontSize="42"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource CoralBrush}" />
+                                           Foreground="{StaticResource CoralBrush}"
+                                           TextOptions.TextFormattingMode="Display"
+                                           TextOptions.TextRenderingMode="Aliased" />
                             </StackPanel>
                             <TextBlock Text="QUICK. PRIVATE. GONE."
                                        Margin="2,8,0,0"

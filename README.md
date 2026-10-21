@@ -1,4 +1,4 @@
-# Disposable Screenshots
+# Snipt
 
 A tiny native Windows screenshot utility for quick, throwaway captures.
 
@@ -44,7 +44,7 @@ From the repository root:
 The published executable is:
 
 ```text
-dist\win-x64\DisposableScreenshots.exe
+dist\win-x64\Snipt.exe
 ```
 
 ## Install
@@ -52,13 +52,13 @@ dist\win-x64\DisposableScreenshots.exe
 Run the setup program:
 
 ```text
-dist\DisposableScreenshots-Setup.exe
+dist\Snipt-Setup.exe
 ```
 
 It installs per user, so no administrator rights are required. The default location is:
 
 ```text
-%LOCALAPPDATA%\Programs\Disposable Screenshots
+%LOCALAPPDATA%\Programs\Snipt
 ```
 
 The installer adds a Start Menu shortcut and a desktop shortcut by default. If the app is already running, setup closes it and continues. After installation the app opens its main window and also lives in the system tray. To remove it, use **Settings > Apps > Installed apps**, or run the uninstaller in the install folder.
@@ -82,15 +82,15 @@ The installer is unsigned, so Windows SmartScreen may show a warning on first la
 6. Press **Esc** or right-click to cancel the selection.
 7. Press the global hotkey again during the countdown or selection to cancel.
 
-Closing the main window leaves the app running in the system tray. Double-click the tray icon, choose **Open Disposable Screenshots** from its menu, or launch the desktop/Start Menu shortcut again to bring the window back. Launching the shortcut while the app is running activates the existing window instead of starting a duplicate.
+Closing the main window leaves the app running in the system tray. Double-click the tray icon, choose **Open Snipt** from its menu, or launch the desktop/Start Menu shortcut again to bring the window back. Launching the shortcut while the app is running activates the existing window instead of starting a duplicate.
 
 ### Testing without a mouse
 
 The app accepts two command-line arguments for smoke testing:
 
 ```powershell
-.\src\DisposableScreenshots\bin\Debug\net48\DisposableScreenshots.exe --capture
-.\src\DisposableScreenshots\bin\Debug\net48\DisposableScreenshots.exe --capture-full
+.\src\DisposableScreenshots\bin\Debug\net48\Snipt.exe --capture
+.\src\DisposableScreenshots\bin\Debug\net48\Snipt.exe --capture-full
 ```
 
 These still use the configured countdown. They are intended for development and automation, not as a general CLI interface.
@@ -102,19 +102,19 @@ These still use the configured countdown. They are intended for development and 
 Settings are stored in:
 
 ```text
-%APPDATA%\DisposableScreenshots\settings.json
+%APPDATA%\Snipt\settings.json
 ```
 
 Dev mode uses a separate file:
 
 ```text
-%APPDATA%\DisposableScreenshots-dev\settings.json
+%APPDATA%\Snipt-dev\settings.json
 ```
 
 Logs are written to:
 
 ```text
-%LOCALAPPDATA%\DisposableScreenshots\app.log
+%LOCALAPPDATA%\Snipt\app.log
 ```
 
 Open the main window and click **Settings** at the bottom of the window, or use **Settings** in the tray menu.
@@ -168,6 +168,7 @@ Important implementation files:
 - The app is per-monitor DPI aware (`PerMonitorV2`).
 - The clipboard auto-clear timer only clears the clipboard if the custom marker data is still present. If you copied something else in the meantime, it leaves your clipboard alone.
 - The app targets .NET Framework 4.8 and uses the WPF that ships with supported Windows versions, keeping the distribution small without a bundled runtime. The main window, in-window settings panel, preview toast, countdown card, and tray menu use the custom sunset retro theme; the selection overlay stays custom-drawn and positioned for tight control over capture behavior.
+- Body text uses the bundled Silkscreen font. Display headings use the bundled 04b_30 font, rendered aliased for crisp pixel edges.
 
 ## Known limitations / next up
 
@@ -178,6 +179,11 @@ Important implementation files:
 - Real mouse/keyboard interaction must be tested on an unlocked desktop. The app cannot receive local input while Windows is showing the lock screen.
 - `dotnet watch` restarts on XAML changes instead of doing true live XAML reload.
 
+## Credits
+
+- **Silkscreen** by Jason Kottke, used for body and control text (SIL Open Font License).
+- **04b_30** by 04 / Yuji Oshimoto, used for display headings ([DaFont](https://www.dafont.com/04b-30.font)).
+
 ## Privacy
 
-Disposable Screenshots does not contain networking code. Captures remain in memory and, if you choose, on the clipboard or in a file you explicitly save.
+Snipt does not contain networking code. Captures remain in memory and, if you choose, on the clipboard or in a file you explicitly save.

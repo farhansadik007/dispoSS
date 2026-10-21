@@ -9,12 +9,14 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AssemblyName>DisposableScreenshots</AssemblyName>
+    <AssemblyName>Snipt</AssemblyName>
     <RootNamespace>DisposableScreenshots</RootNamespace>
     <Platforms>AnyCPU;x64</Platforms>
     <Version>0.1.0</Version>
-    <Authors>Disposable Screenshots</Authors>
-    <Description>A disposable screenshot tool with a countdown timer.</Description>
+    <AssemblyTitle>Snipt</AssemblyTitle>
+    <Product>Snipt</Product>
+    <Authors>Snipt</Authors>
+    <Description>Snipt - a disposable screenshot tool with a countdown timer.</Description>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>

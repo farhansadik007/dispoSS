@@ -1,4 +1,4 @@
-# Disposable Screenshots - Approved Behavior
+# Snipt - Approved Behavior
 
 This file is the source of truth for behavior the user has already approved.
 Read it before changing UI, motion, capture flow, or packaging.
@@ -12,6 +12,8 @@ Last approved: 2026-10-21
 
 ## Product constraints
 
+- Product name is **Snipt**; the published executable is `Snipt.exe`.
+- Internal namespaces and the `src/DisposableScreenshots` folder keep the old name for stability. Do not treat those as user-facing branding.
 - Native Windows app built with C# / WPF on **.NET Framework 4.8**. Do not move to a bundled runtime, Electron, or a web UI.
 - Targets **Windows 10 1903+** and **Windows 11**.
 - Per-user install, **no administrator rights**.
@@ -72,6 +74,20 @@ Do not add opacity, scale, glow, or color-pulse hover effects to press-only butt
 - Keep the sunset retro visual style: pixel font, navy/coral/gold palette, rounded frame, uppercase labels, hard offset shadows.
 - Keep the window title-bar buttons in the top-right: minimize, settings, close.
 
+## Approved typography
+
+- Body and control text use **Silkscreen**.
+- Display headings use **04b_30** (font family name `04b 30`):
+  - main hero `SNIPT?`
+  - settings `SETTINGS?`
+  - preview `PREVIEW?`
+- Display headings render with `TextRenderingMode="Aliased"` for crisp pixel edges.
+- The 04b_30 font is embedded at `src/DisposableScreenshots/Assets/Fonts/04B_30__.TTF`.
+  The pack URI must keep the space in the family name:
+  `pack://application:,,,/Assets/Fonts/#04b 30`.
+- Do not replace these fonts or re-enable anti-aliasing on the display headings without approval.
+- The window title bar and body copy stay in Silkscreen.
+
 ## Approved settings
 
 The settings panel contains:
@@ -82,8 +98,9 @@ The settings panel contains:
 - Clipboard auto-clear interval
 - Start with Windows
 
-Settings are saved per user at `%APPDATA%\DisposableScreenshots\settings.json`.
-Dev mode uses `%APPDATA%\DisposableScreenshots-dev\settings.json`.
+Settings are saved per user at `%APPDATA%\Snipt\settings.json`.
+Dev mode uses `%APPDATA%\Snipt-dev\settings.json`. Existing settings from the old
+`DisposableScreenshots` folder are read once and migrated on the next save.
 
 ## Approved capture flow
 
@@ -109,8 +126,8 @@ Behavior details:
 
 - Build with `.\publish.cmd` into `dist\win-x64`.
 - Build the installer with `.\installer.cmd`; it requires Inno Setup 6.
-- Installer output: `dist\DisposableScreenshots-Setup.exe`.
-- Default install location: `%LOCALAPPDATA%\Programs\Disposable Screenshots`.
+- Installer output: `dist\Snipt-Setup.exe`.
+- Default install location: `%LOCALAPPDATA%\Programs\Snipt`.
 - Installer adds Start Menu and desktop shortcuts.
 - Setup closes a running copy before installing.
 - The installer is unsigned. SmartScreen may warn on another machine; that is accepted for now.
@@ -119,7 +136,8 @@ Behavior details:
 ## Do not change without explicit approval
 
 - The hover/press split and the exact offsets and timings in the tables above.
-- The sunset retro theme and the `Face`-based motion approach.
+- The **Snipt** name and the sunset retro theme.
+- The `Face`-based motion approach and the Silkscreen / 04b_30 typography split.
 - .NET Framework 4.8 and the framework-dependent, per-user packaging.
 - Clipboard-first behavior and the no-temp-files / no-history / no-network guarantees.
 - Tray behavior, single-instance behavior, and close-to-tray.
@@ -139,7 +157,7 @@ These are possible future features. Do not implement them unless the user asks:
 
 1. `dotnet build src\DisposableScreenshots\DisposableScreenshots.csproj -c Debug`
 2. Rebuild and reinstall with `.\publish.cmd` and `.\installer.cmd`.
-3. Confirm the installed executable matches `dist\win-x64\DisposableScreenshots.exe`.
+3. Confirm the installed executable matches `dist\win-x64\Snipt.exe`.
 4. Check the motion matrix on the installed build:
    - main capture button: `0 -> 2 -> 4 -> 2`
    - title-bar button: `0 -> 3 -> 0`
