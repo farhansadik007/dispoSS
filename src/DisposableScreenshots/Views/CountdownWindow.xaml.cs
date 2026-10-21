@@ -22,7 +22,7 @@ public partial class CountdownWindow : Window
     {
         remaining = Math.Max(0, remaining);
         CountdownText.Text = remaining.ToString();
-        CountdownProgress.Value = Math.Clamp(1.0 - (double)remaining / _totalSeconds, 0, 1);
+        CountdownProgress.Value = MathCompat.Clamp(1.0 - (double)remaining / _totalSeconds, 0, 1);
     }
 
     private void OnSourceInitialized(object? sender, EventArgs e)

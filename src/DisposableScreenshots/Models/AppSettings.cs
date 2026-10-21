@@ -22,9 +22,9 @@ public sealed class AppSettings
 
     public void Normalize()
     {
-        DelaySeconds = Math.Clamp(DelaySeconds, 0, 60);
-        PreviewSeconds = Math.Clamp(PreviewSeconds, 2, 60);
-        ClipboardClearSeconds = Math.Clamp(ClipboardClearSeconds, 0, 3600);
+        DelaySeconds = MathCompat.Clamp(DelaySeconds, 0, 60);
+        PreviewSeconds = MathCompat.Clamp(PreviewSeconds, 2, 60);
+        ClipboardClearSeconds = MathCompat.Clamp(ClipboardClearSeconds, 0, 3600);
 
         if (!HotkeyDefinition.TryParse(Hotkey, out var hotkey))
         {

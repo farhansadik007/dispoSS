@@ -36,7 +36,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Files]
-Source: "dist\win-x64\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.pdb,*.xml"
 Source: "README.md"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
@@ -45,3 +45,23 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+
+[Code]
+function IsDotNet48Installed: Boolean;
+var
+  Release: Cardinal;
+begin
+  Result :=
+    RegQueryDWordValue(HKLM64, 'SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full', 'Release', Release) and
+    (Release >= 528040);
+end;
+
+function InitializeSetup: Boolean;
+begin
+  Result := IsDotNet48Installed;
+  if not Result then
+  begin
+    MsgBox('Disposable Screenshots requires .NET Framework 4.8 or newer.' + #13#10 +
+           'It is included with supported versions of Windows 10 and 11.', mbError, MB_OK);
+  end;
+end;

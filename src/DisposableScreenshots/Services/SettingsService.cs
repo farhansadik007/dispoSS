@@ -55,7 +55,8 @@ public sealed class SettingsService
             var json = JsonSerializer.Serialize(settings, JsonOptions);
             var temporaryPath = SettingsPath + ".tmp";
             File.WriteAllText(temporaryPath, json, new UTF8Encoding(false));
-            File.Move(temporaryPath, SettingsPath, true);
+            File.Copy(temporaryPath, SettingsPath, true);
+            File.Delete(temporaryPath);
         }
         catch (Exception exception)
         {

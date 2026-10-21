@@ -4,8 +4,6 @@ using System.Windows.Threading;
 using DisposableScreenshots.Models;
 using DisposableScreenshots.Services;
 using DisposableScreenshots.Views;
-using Wpf.Ui.Appearance;
-using WindowBackdropType = Wpf.Ui.Controls.WindowBackdropType;
 
 namespace DisposableScreenshots;
 
@@ -57,8 +55,6 @@ public partial class App : Application
 
         try
         {
-            ApplicationThemeManager.Apply(ApplicationTheme.Dark, WindowBackdropType.None, false);
-
             _settingsService = new SettingsService(IsDev);
             _settings = _settingsService.Load();
             _clipboard = new ClipboardService();
@@ -73,7 +69,7 @@ public partial class App : Application
             var startInTray = e.Args.Any(argument =>
                 string.Equals(argument, "--tray", StringComparison.OrdinalIgnoreCase));
             var showMainWindow = !autoCapture && !startInTray;
-            AppLog.Info($"Startup args: {string.Join(' ', e.Args)}; showMainWindow={showMainWindow}.");
+            AppLog.Info($"Startup args: {string.Join(" ", e.Args)}; showMainWindow={showMainWindow}.");
 
             if (showMainWindow)
             {

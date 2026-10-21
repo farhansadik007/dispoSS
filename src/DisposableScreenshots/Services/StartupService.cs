@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.Win32;
 
 namespace DisposableScreenshots.Services;
@@ -24,7 +25,7 @@ public static class StartupService
             return;
         }
 
-        var executable = Environment.ProcessPath;
+        var executable = Process.GetCurrentProcess().MainModule?.FileName;
         if (string.IsNullOrWhiteSpace(executable))
         {
             executable = Environment.GetCommandLineArgs()[0];

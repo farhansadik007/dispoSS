@@ -22,8 +22,14 @@ public sealed record HotkeyDefinition(ModifierKeys Modifiers, Key Key)
         var modifiers = ModifierKeys.None;
         Key? key = null;
 
-        foreach (var rawPart in text.Split('+', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        foreach (var raw in text!.Split(new[] { '+' }, StringSplitOptions.RemoveEmptyEntries))
         {
+            var rawPart = raw.Trim();
+            if (rawPart.Length == 0)
+            {
+                continue;
+            }
+
             switch (rawPart.ToLowerInvariant())
             {
                 case "ctrl":

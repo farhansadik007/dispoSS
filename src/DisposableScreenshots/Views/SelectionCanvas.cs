@@ -237,8 +237,8 @@ public sealed class SelectionCanvas : FrameworkElement
 
     private Point Clamp(Point point) =>
         new(
-            Math.Clamp(point.X, 0, Math.Max(0, ActualWidth)),
-            Math.Clamp(point.Y, 0, Math.Max(0, ActualHeight)));
+            MathCompat.Clamp(point.X, 0, Math.Max(0, ActualWidth)),
+            MathCompat.Clamp(point.Y, 0, Math.Max(0, ActualHeight)));
 
     private static Rect Normalize(Point start, Point end)
     {

@@ -38,10 +38,10 @@ public sealed class DesktopSnapshot
 
     public BitmapSource CropPhysical(PixelRect rect)
     {
-        var x = Math.Clamp(rect.X, VirtualScreen.Left, VirtualScreen.Right - 1);
-        var y = Math.Clamp(rect.Y, VirtualScreen.Top, VirtualScreen.Bottom - 1);
-        var width = Math.Clamp(rect.Width, 1, VirtualScreen.Right - x);
-        var height = Math.Clamp(rect.Height, 1, VirtualScreen.Bottom - y);
+        var x = MathCompat.Clamp(rect.X, VirtualScreen.Left, VirtualScreen.Right - 1);
+        var y = MathCompat.Clamp(rect.Y, VirtualScreen.Top, VirtualScreen.Bottom - 1);
+        var width = MathCompat.Clamp(rect.Width, 1, VirtualScreen.Right - x);
+        var height = MathCompat.Clamp(rect.Height, 1, VirtualScreen.Bottom - y);
 
         var cropped = new CroppedBitmap(
             Image,

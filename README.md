@@ -4,7 +4,7 @@ A tiny native Windows screenshot utility for quick, throwaway captures.
 
 Press **Ctrl+Alt+S**, wait for the countdown, drag a region, and the image is copied to the clipboard. A small preview lets you save it or discard it. Nothing is written to disk unless you explicitly click **Save**.
 
-Built with **C# / WPF on .NET 10** — no Electron, no browser, no background cloud service.
+Built with **C# / WPF on .NET Framework 4.8** - no Electron, no browser, no background cloud service.
 
 ## Features
 
@@ -26,7 +26,7 @@ Built with **C# / WPF on .NET 10** — no Electron, no browser, no background cl
 
 - Windows 10 (1903+) or Windows 11
 - For development: .NET SDK **10.0.402** or newer
-- Published builds are self-contained and do not need .NET installed
+- .NET Framework **4.8** or newer (included with supported Windows 10 and Windows 11 versions)
 
 ## Commands
 
@@ -35,7 +35,7 @@ From the repository root:
 ```powershell
 .\build.cmd      # Debug build
 .\dev.cmd        # dotnet watch with hot reload and dev settings
-.\publish.cmd    # Self-contained single-file build in dist\win-x64
+.\publish.cmd    # Framework-dependent release build in dist\win-x64
 .\installer.cmd  # Build the Windows installer in dist
 ```
 
@@ -89,8 +89,8 @@ Closing the main window leaves the app running in the system tray. Double-click 
 The app accepts two command-line arguments for smoke testing:
 
 ```powershell
-.\src\DisposableScreenshots\bin\Debug\net10.0-windows\DisposableScreenshots.exe --capture
-.\src\DisposableScreenshots\bin\Debug\net10.0-windows\DisposableScreenshots.exe --capture-full
+.\src\DisposableScreenshots\bin\Debug\net48\DisposableScreenshots.exe --capture
+.\src\DisposableScreenshots\bin\Debug\net48\DisposableScreenshots.exe --capture-full
 ```
 
 These still use the configured countdown. They are intended for development and automation, not as a general CLI interface.
@@ -167,7 +167,7 @@ Important implementation files:
 - The app is single-instance. Launching a second copy activates the existing window and exits.
 - The app is per-monitor DPI aware (`PerMonitorV2`).
 - The clipboard auto-clear timer only clears the clipboard if the custom marker data is still present. If you copied something else in the meantime, it leaves your clipboard alone.
-- WPF-UI supplies window/backdrop plumbing. The main window, in-window settings panel, preview toast, countdown card, and tray menu use the custom sunset retro theme; the selection overlay stays custom-drawn and positioned for tight control over capture behavior.
+- The app targets .NET Framework 4.8 and uses the WPF that ships with supported Windows versions, keeping the distribution small without a bundled runtime. The main window, in-window settings panel, preview toast, countdown card, and tray menu use the custom sunset retro theme; the selection overlay stays custom-drawn and positioned for tight control over capture behavior.
 
 ## Known limitations / next up
 
