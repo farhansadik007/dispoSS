@@ -28,6 +28,13 @@ namespace DisposableScreenshots.Controls
                 typeof(ButtonMotion),
                 new PropertyMetadata(4.0));
 
+        public static readonly DependencyProperty HoverMotionProperty =
+            DependencyProperty.RegisterAttached(
+                "HoverMotion",
+                typeof(bool),
+                typeof(ButtonMotion),
+                new PropertyMetadata(true));
+
         private static readonly ConditionalWeakTable<Button, MotionState> States =
             new ConditionalWeakTable<Button, MotionState>();
 
@@ -53,6 +60,16 @@ namespace DisposableScreenshots.Controls
         public static void SetPressOffset(DependencyObject element, double value)
         {
             element.SetValue(PressOffsetProperty, value);
+        }
+
+        public static bool GetHoverMotion(DependencyObject element)
+        {
+            return (bool)element.GetValue(HoverMotionProperty);
+        }
+
+        public static void SetHoverMotion(DependencyObject element, bool value)
+        {
+            element.SetValue(HoverMotionProperty, value);
         }
 
         private static void OnIsEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -187,7 +204,18 @@ namespace DisposableScreenshots.Controls
             MotionState state;
             if (States.TryGetValue(button, out state) && state.Shift != null)
             {
-                Animate(state, state.Pressed ? PressOffset(button) : PressOffset(button) / 2.0, HoverDurationMs);
+                if (state.Pressed)
+                {
+                    Animate(state, PressOffset(button), HoverDurationMs);
+                }
+                else if (GetHoverMotion(button))
+                {
+                    Animate(state, PressOffset(button) / 2.0, HoverDurationMs);
+                }
+                else
+                {
+                    Animate(state, 0, HoverDurationMs);
+                }
             }
         }
 
@@ -239,7 +267,7 @@ namespace DisposableScreenshots.Controls
                 state.Pressed = false;
                 if (state.Shift != null)
                 {
-                    Animate(state, button.IsMouseOver ? PressOffset(button) / 2.0 : 0, ReleaseDurationMs);
+                    Animate(state, GetHoverMotion(button) && button.IsMouseOver ? PressOffset(button) / 2.0 : 0, ReleaseDurationMs);
                 }
             }
         }
@@ -258,7 +286,7 @@ namespace DisposableScreenshots.Controls
                 state.Pressed = false;
                 if (state.Shift != null)
                 {
-                    Animate(state, button.IsMouseOver ? PressOffset(button) / 2.0 : 0, ReleaseDurationMs);
+                    Animate(state, GetHoverMotion(button) && button.IsMouseOver ? PressOffset(button) / 2.0 : 0, ReleaseDurationMs);
                 }
             }
         }
@@ -290,7 +318,7 @@ namespace DisposableScreenshots.Controls
                 return PressOffset(button);
             }
 
-            return button.IsMouseOver ? PressOffset(button) / 2.0 : 0;
+            return GetHoverMotion(button) && button.IsMouseOver ? PressOffset(button) / 2.0 : 0;
         }
 
         private static double PressOffset(Button button)

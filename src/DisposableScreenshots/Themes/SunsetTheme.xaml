@@ -92,6 +92,7 @@
         <Setter Property="UseLayoutRounding" Value="True" />
         <Setter Property="controls:ButtonMotion.IsEnabled" Value="True" />
         <Setter Property="controls:ButtonMotion.PressOffset" Value="3" />
+        <Setter Property="controls:ButtonMotion.HoverMotion" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
