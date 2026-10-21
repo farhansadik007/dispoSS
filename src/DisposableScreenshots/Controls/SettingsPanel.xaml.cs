@@ -1,6 +1,8 @@
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
 using DisposableScreenshots.Models;
 
 namespace DisposableScreenshots.Controls;
@@ -68,22 +70,31 @@ public partial class SettingsPanel : UserControl
         return options;
     }
 
-    private static string FormatSeconds(int value) =>
-        value == 0 ? "OFF" : $"{value}S";
-
-    private static string FormatClipboard(int value)
+    private static void SetTimeText(TextBlock target, int value, bool allowMinutes)
     {
+        target.Inlines.Clear();
+
         if (value == 0)
         {
-            return "OFF";
+            target.Inlines.Add(new Run("OFF"));
+            return;
         }
 
-        if (value < 60)
+        var number = value;
+        var unit = "s";
+
+        if (allowMinutes && value >= 60 && value % 60 == 0)
         {
-            return $"{value}S";
+            number = value / 60;
+            unit = "m";
         }
 
-        return value % 60 == 0 ? $"{value / 60}M" : $"{value}S";
+        target.Inlines.Add(new Run(number.ToString()) { FontWeight = FontWeights.Bold });
+        target.Inlines.Add(new Run(unit)
+        {
+            FontSize = 10,
+            Foreground = target.TryFindResource("CoralBrush") as Brush ?? target.Foreground
+        });
     }
 
     private void DelayPrevious_Click(object sender, RoutedEventArgs e) => MoveDelay(-1);
@@ -120,13 +131,13 @@ public partial class SettingsPanel : UserControl
         count == 0 ? 0 : (index % count + count) % count;
 
     private void UpdateDelayText() =>
-        DelayValueText.Text = FormatSeconds(_delayOptions[_delayIndex]);
+        SetTimeText(DelayValueText, _delayOptions[_delayIndex], false);
 
     private void UpdatePreviewText() =>
-        PreviewValueText.Text = FormatSeconds(_previewOptions[_previewIndex]);
+        SetTimeText(PreviewValueText, _previewOptions[_previewIndex], false);
 
     private void UpdateClipboardText() =>
-        ClipboardValueText.Text = FormatClipboard(_clipboardOptions[_clipboardIndex]);
+        SetTimeText(ClipboardValueText, _clipboardOptions[_clipboardIndex], true);
 
     private void ShowPreviewCheckBox_Checked(object sender, RoutedEventArgs e)
     {

@@ -39,7 +39,7 @@
         <Grid Grid.Row="1" Margin="0,12,0,12">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="8" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -48,7 +48,7 @@
                     BorderBrush="{StaticResource NavyBrush}"
                     BorderThickness="2"
                     CornerRadius="12"
-                    Padding="12,10">
+                    Padding="10,10">
                 <StackPanel>
                     <TextBlock Text="CAPTURE"
                                FontSize="11"
@@ -97,7 +97,7 @@
                                            FontWeight="Bold"
                                            Foreground="{StaticResource NavyBrush}" />
                             </Button>
-                            <Border MinWidth="46"
+                            <Border MinWidth="38"
                                     Margin="4,0"
                                     Padding="6,4"
                                     Background="{StaticResource CreamBrush}"
@@ -140,7 +140,7 @@
                     BorderBrush="{StaticResource NavyBrush}"
                     BorderThickness="2"
                     CornerRadius="12"
-                    Padding="12,10">
+                    Padding="10,10">
                 <StackPanel>
                     <TextBlock Text="PRIVACY"
                                FontSize="11"
@@ -171,7 +171,7 @@
                                            FontWeight="Bold"
                                            Foreground="{StaticResource NavyBrush}" />
                             </Button>
-                            <Border MinWidth="46"
+                            <Border MinWidth="38"
                                     Margin="4,0"
                                     Padding="6,4"
                                     Background="{StaticResource CreamBrush}"
@@ -221,7 +221,7 @@
                                            FontWeight="Bold"
                                            Foreground="{StaticResource NavyBrush}" />
                             </Button>
-                            <Border MinWidth="46"
+                            <Border MinWidth="38"
                                     Margin="4,0"
                                     Padding="6,4"
                                     Background="{StaticResource CreamBrush}"

@@ -123,7 +123,7 @@
     <Style x:Key="RetroStepButton"
            TargetType="Button"
            BasedOn="{StaticResource RetroWindowButton}">
-        <Setter Property="Width" Value="30" />
+        <Setter Property="Width" Value="26" />
         <Setter Property="Height" Value="28" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="FontWeight" Value="Bold" />

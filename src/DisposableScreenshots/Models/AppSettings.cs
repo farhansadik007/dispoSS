@@ -20,6 +20,18 @@ public sealed class AppSettings
 
     public AppSettings Clone() => (AppSettings)MemberwiseClone();
 
+    public void CopyFrom(AppSettings other)
+    {
+        Hotkey = other.Hotkey;
+        DelaySeconds = other.DelaySeconds;
+        CopyToClipboard = other.CopyToClipboard;
+        ShowPreview = other.ShowPreview;
+        PreviewSeconds = other.PreviewSeconds;
+        ClipboardClearSeconds = other.ClipboardClearSeconds;
+        StartWithWindows = other.StartWithWindows;
+        ShowFirstRunTip = other.ShowFirstRunTip;
+    }
+
     public void Normalize()
     {
         DelaySeconds = MathCompat.Clamp(DelaySeconds, 0, 60);

@@ -370,8 +370,8 @@ public partial class App : Application
             return;
         }
 
-        var previous = _settings;
-        _settings = draft;
+        var previous = _settings.Clone();
+        _settings.CopyFrom(draft);
         _settings.Normalize();
         AppLog.Info($"Applying settings: path={_settingsService.SettingsPath}, delay={_settings.DelaySeconds}, preview={_settings.PreviewSeconds}, clipboard={_settings.ClipboardClearSeconds}.");
 
@@ -383,7 +383,7 @@ public partial class App : Application
         catch (Exception exception)
         {
             AppLog.Error("Could not apply settings", exception);
-            _settings = previous;
+            _settings.CopyFrom(previous);
             _tray?.UpdateDelay(_settings.DelaySeconds);
             _tray?.ShowWarning("Settings", "Could not save the new settings.");
         }
