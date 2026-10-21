@@ -42,30 +42,96 @@
                                 BorderThickness="3"
                                 CornerRadius="12"
                                 Padding="{TemplateBinding Padding}">
-                            <Grid>
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  RecognizesAccessKey="True"
-                                                  TextElement.Foreground="{TemplateBinding Foreground}" />
-                                <Border x:Name="HoverTint"
-                                        Background="{StaticResource HoverTintBrush}"
-                                        CornerRadius="9"
-                                        IsHitTestVisible="False"
-                                        Visibility="Collapsed" />
-                            </Grid>
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="FaceShift" X="0" Y="0" />
+                            </Border.RenderTransform>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"
+                                              TextElement.Foreground="{TemplateBinding Foreground}" />
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="HoverTint" Property="Visibility" Value="Visible" />
-                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsPressed" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="FaceShift"
+                                                         Storyboard.TargetProperty="X"
+                                                         To="2"
+                                                         Duration="0:0:0.16">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="FaceShift"
+                                                         Storyboard.TargetProperty="Y"
+                                                         To="2"
+                                                         Duration="0:0:0.16">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                        </MultiTrigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Face" Property="RenderTransform">
-                                <Setter.Value>
-                                    <TranslateTransform X="2" Y="2" />
-                                </Setter.Value>
-                            </Setter>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="FaceShift"
+                                                         Storyboard.TargetProperty="X"
+                                                         To="4"
+                                                         Duration="0:0:0.08">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="FaceShift"
+                                                         Storyboard.TargetProperty="Y"
+                                                         To="4"
+                                                         Duration="0:0:0.08">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
                         </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="False" />
+                                <Condition Property="IsPressed" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="FaceShift"
+                                                         Storyboard.TargetProperty="X"
+                                                         To="0"
+                                                         Duration="0:0:0.18">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="FaceShift"
+                                                         Storyboard.TargetProperty="Y"
+                                                         To="0"
+                                                         Duration="0:0:0.18">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                        </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.5" />
                         </Trigger>
@@ -114,30 +180,96 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="2"
                                 CornerRadius="8">
-                            <Grid>
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  RecognizesAccessKey="True"
-                                                  TextElement.Foreground="{TemplateBinding Foreground}" />
-                                <Border x:Name="HoverTint"
-                                        Background="{StaticResource HoverTintBrush}"
-                                        CornerRadius="6"
-                                        IsHitTestVisible="False"
-                                        Visibility="Collapsed" />
-                            </Grid>
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="FaceShift" X="0" Y="0" />
+                            </Border.RenderTransform>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"
+                                              TextElement.Foreground="{TemplateBinding Foreground}" />
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="HoverTint" Property="Visibility" Value="Visible" />
-                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsPressed" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="FaceShift"
+                                                         Storyboard.TargetProperty="X"
+                                                         To="1.5"
+                                                         Duration="0:0:0.16">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="FaceShift"
+                                                         Storyboard.TargetProperty="Y"
+                                                         To="1.5"
+                                                         Duration="0:0:0.16">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                        </MultiTrigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Face" Property="RenderTransform">
-                                <Setter.Value>
-                                    <TranslateTransform X="1" Y="1" />
-                                </Setter.Value>
-                            </Setter>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="FaceShift"
+                                                         Storyboard.TargetProperty="X"
+                                                         To="3"
+                                                         Duration="0:0:0.08">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="FaceShift"
+                                                         Storyboard.TargetProperty="Y"
+                                                         To="3"
+                                                         Duration="0:0:0.08">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
                         </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="False" />
+                                <Condition Property="IsPressed" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="FaceShift"
+                                                         Storyboard.TargetProperty="X"
+                                                         To="0"
+                                                         Duration="0:0:0.18">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="FaceShift"
+                                                         Storyboard.TargetProperty="Y"
+                                                         To="0"
+                                                         Duration="0:0:0.18">
+                                            <DoubleAnimation.EasingFunction>
+                                                <SineEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                        </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
