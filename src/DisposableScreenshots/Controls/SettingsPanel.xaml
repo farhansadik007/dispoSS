@@ -69,7 +69,7 @@
                                 CornerRadius="7"
                                 Padding="7,3">
                             <TextBlock x:Name="HotkeyText"
-                                       FontSize="9" />
+                                       FontSize="10" />
                         </Border>
                     </Grid>
 
@@ -82,7 +82,7 @@
                             <TextBlock Text="COUNTDOWN" />
                             <TextBlock Text="BEFORE FREEZE"
                                        Margin="0,2,0,0"
-                                       FontSize="9"
+                                       FontSize="10"
                                        Opacity="0.6" />
                         </StackPanel>
                         <StackPanel Grid.Column="1"
@@ -106,6 +106,7 @@
                                     CornerRadius="7">
                                 <TextBlock x:Name="DelayValueText"
                                            Text="3S"
+                                           FontSize="11"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center" />
                             </Border>
@@ -155,7 +156,7 @@
                             <TextBlock Text="CLEAR CLIPBOARD" />
                             <TextBlock Text="IF STILL OURS"
                                        Margin="0,2,0,0"
-                                       FontSize="9"
+                                       FontSize="10"
                                        Opacity="0.6" />
                         </StackPanel>
                         <StackPanel Grid.Column="1"
@@ -179,6 +180,7 @@
                                     CornerRadius="7">
                                 <TextBlock x:Name="ClipboardValueText"
                                            Text="OFF"
+                                           FontSize="11"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center" />
                             </Border>
@@ -203,7 +205,7 @@
                             <TextBlock Text="PREVIEW TIMEOUT" />
                             <TextBlock Text="HOVER PAUSES IT"
                                        Margin="0,2,0,0"
-                                       FontSize="9"
+                                       FontSize="10"
                                        Opacity="0.6" />
                         </StackPanel>
                         <StackPanel x:Name="PreviewStepper"
@@ -228,6 +230,7 @@
                                     CornerRadius="7">
                                 <TextBlock x:Name="PreviewValueText"
                                            Text="8S"
+                                           FontSize="11"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center" />
                             </Border>
@@ -259,7 +262,7 @@
                     <TextBlock x:Name="DevNote"
                                Text="DISABLED IN DEV MODE."
                                Margin="0,6,0,0"
-                               FontSize="9"
+                               FontSize="10"
                                Opacity="0.6"
                                TextWrapping="Wrap"
                                Visibility="Collapsed" />
@@ -275,7 +278,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="VersionText"
                        VerticalAlignment="Center"
-                       FontSize="9"
+                       FontSize="10"
                        Opacity="0.55" />
             <Button Grid.Column="1"
                     Content="CANCEL"

@@ -76,10 +76,11 @@ Do not add opacity, scale, glow, or color-pulse hover effects to press-only butt
 
 ## Approved typography
 
-- Body and control text use **Minecraftia**.
-- The Minecraftia font is embedded at `src/DisposableScreenshots/Assets/Fonts/Minecraftia-Regular.ttf`.
-  Its pack URI is `pack://application:,,,/Assets/Fonts/#Minecraftia`.
-- Secondary text stays at **9 px or larger** so the pixel glyphs remain legible. Do not shrink it below 9 px.
+- Body and control text use **Pixel Operator 8**.
+- The Pixel Operator 8 fonts are embedded at `src/DisposableScreenshots/Assets/Fonts/PixelOperator8-Regular.ttf`
+  and `PixelOperator8-Bold.ttf`.
+  The pack URI is `pack://application:,,,/Assets/Fonts/#Pixel Operator 8`.
+- Secondary text stays at **10 px or larger** so the pixel glyphs remain legible. Do not shrink it below 10 px.
 - Display headings use **04b_30** (font family name `04b 30`):
   - main hero `dispoSS?`, rendered as a small-caps logo: `D` and `SS` at 42 px, `ISPO` at 30 px, coral `?`
   - settings `SETTINGS?`
@@ -89,7 +90,7 @@ Do not add opacity, scale, glow, or color-pulse hover effects to press-only butt
   The pack URI must keep the space in the family name:
   `pack://application:,,,/Assets/Fonts/#04b 30`.
 - Do not replace these fonts or re-enable anti-aliasing on the display headings without approval.
-- The window title bar and body copy stay in Minecraftia.
+- The window title bar and body copy stay in Pixel Operator 8.
 
 ## Approved settings
 
@@ -140,7 +141,7 @@ Behavior details:
 
 - The hover/press split and the exact offsets and timings in the tables above.
 - The **dispoSS** name and the sunset retro theme.
-- The `Face`-based motion approach and the Minecraftia / 04b_30 typography split.
+- The `Face`-based motion approach and the Pixel Operator 8 / 04b_30 typography split.
 - .NET Framework 4.8 and the framework-dependent, per-user packaging.
 - Clipboard-first behavior and the no-temp-files / no-history / no-network guarantees.
 - Tray behavior, single-instance behavior, and close-to-tray.
