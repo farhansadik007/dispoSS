@@ -168,7 +168,7 @@ Important implementation files:
 - The app is per-monitor DPI aware (`PerMonitorV2`).
 - The clipboard auto-clear timer only clears the clipboard if the custom marker data is still present. If you copied something else in the meantime, it leaves your clipboard alone.
 - The app targets .NET Framework 4.8 and uses the WPF that ships with supported Windows versions, keeping the distribution small without a bundled runtime. The main window, in-window settings panel, preview toast, countdown card, and tray menu use the custom sunset retro theme; the selection overlay stays custom-drawn and positioned for tight control over capture behavior.
-- Body text uses the bundled Silkscreen font. Display headings use the bundled 04b_30 font, rendered aliased for crisp pixel edges.
+- Body text uses the bundled Minecraftia font. Display headings use the bundled 04b_30 font, rendered aliased for crisp pixel edges.
 
 ## Known limitations / next up
 
@@ -181,7 +181,7 @@ Important implementation files:
 
 ## Credits
 
-- **Silkscreen** by Jason Kottke, used for body and control text (SIL Open Font License).
+- **Minecraftia** by Andrew Tyler, used for body and control text ([DaFont](https://www.dafont.com/minecraftia.font)).
 - **04b_30** by 04 / Yuji Oshimoto, used for display headings ([DaFont](https://www.dafont.com/04b-30.font)).
 
 ## Privacy

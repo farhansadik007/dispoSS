@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:DisposableScreenshots.Controls">
 
-    <FontFamily x:Key="PixelFont">pack://application:,,,/Assets/Fonts/#Silkscreen</FontFamily>
+    <FontFamily x:Key="PixelFont">pack://application:,,,/Assets/Fonts/#Minecraftia</FontFamily>
     <FontFamily x:Key="TitleFont">pack://application:,,,/Assets/Fonts/#04b 30</FontFamily>
 
     <SolidColorBrush x:Key="NavyBrush" Color="#173A5E" />
@@ -131,7 +131,7 @@
 
     <Style x:Key="RetroCheckBox" TargetType="CheckBox">
         <Setter Property="FontFamily" Value="{StaticResource PixelFont}" />
-        <Setter Property="FontSize" Value="9" />
+        <Setter Property="FontSize" Value="10" />
         <Setter Property="Foreground" Value="{StaticResource NavyBrush}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -292,7 +292,7 @@
                                 <TextBlock Grid.Column="2"
                                            Margin="16,0,6,0"
                                            VerticalAlignment="Center"
-                                           FontSize="8"
+                                           FontSize="9"
                                            Opacity="0.55"
                                            Text="{TemplateBinding InputGestureText}" />
 
