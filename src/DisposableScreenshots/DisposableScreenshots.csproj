@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <Resource Include="Assets\app.ico" />
-    <Resource Include="Assets\trash-can.png" />
     <Resource Include="Assets\Fonts\*.ttf" />
     <Resource Include="Assets\Fonts\OFL.txt" />
     <Watch Include="**\*.xaml" />
