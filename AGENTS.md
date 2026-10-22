@@ -8,7 +8,7 @@ Read it before changing UI, motion, capture flow, or packaging.
 - If a request conflicts with something below, call it out and ask before changing it.
 - If an approved behavior changes, update this file in the same commit.
 
-Last approved: 2026-10-22
+Last approved: 2026-10-23
 
 ## Product constraints
 
@@ -17,7 +17,7 @@ Last approved: 2026-10-22
 - Native Windows app built with C# / WPF on **.NET Framework 4.8**. Do not move to a bundled runtime, Electron, or a web UI.
 - Targets **Windows 10 1903+** and **Windows 11**.
 - Per-user install, **no administrator rights**.
-- Keep the app and installer **under 15 MB** combined. Current installer is about **3.88 MB**.
+- Keep the app and installer **under 15 MB** combined. Current installer is about **3.88 MB**; the Store MSIX is about **2.18 MB**.
 - Clipboard-first. Nothing is written to disk unless the user explicitly clicks **Save**.
 - No networking, no uploads, no history, no automatic screenshot files.
 
@@ -140,6 +140,29 @@ Behavior details:
 - The installer is unsigned. SmartScreen may warn on another machine; that is accepted for now.
 - Startup entry uses the `--tray` flag.
 
+### Microsoft Store package
+
+- Build the Store package with `.\package.cmd` into `dist\store\dispoSS_1.0.0.0_x64.msix`.
+- The Store package is an x64, full-trust MSIX built with `MakeAppx` from NuGet
+  `Microsoft.Windows.SDK.BuildTools` version `10.0.26100.9169`. Do not add a Visual Studio
+  Windows Application Packaging Project.
+- Store identity: package name `PaperCraneLabs.DispoSS`, publisher
+  `CN=E029A42B-BCDE-43A9-9E99-03026508BB24`, publisher display name `PaperCrane Labs`.
+- Keep the package version and app version at `1.0.0.0` / `1.0.0` for this release.
+- The final MSIX stays **unsigned** for Store submission; Microsoft re-signs it. Do not upload
+  a test-signed package.
+- Local packaged QA uses the test identity `PaperCraneLabs.DispoSSTest` because the reserved
+  Store identity cannot be activated locally (`0x80270254`). Build/install the test package
+  with `store\test-package.ps1`. Do not change the final manifest identity for local QA.
+- The packaged Start with Windows setting uses the declared `uap5:StartupTask`
+  (`TaskId=dispoSSStartup`) with `uap10:Parameters="--tray"` and the WinRT `StartupTask` API.
+  The unpackaged Inno build keeps using the per-user registry Run entry.
+- The Store package targets Windows 10 1903+ and Windows 11, x64, per-user, with no
+  administrator rights.
+- Store listing assets live under `store\listing`. Submission copy, URLs, age rating, and
+  certification notes live in `store\SUBMISSION.md`.
+- Keep the existing GitHub/Inno installer as the direct-download channel alongside the Store.
+
 ## Do not change without explicit approval
 
 - The hover/press split and the exact offsets and timings in the tables above.
@@ -151,6 +174,8 @@ Behavior details:
 - The configurable Ctrl+key hotkey and its default `Ctrl+Alt+S`.
 - The settings fields listed above.
 - The About content: supplied photo, name, bio, social links under the photo, and the SupportKori link.
+- The Store package identity, publisher, x64 full-trust MSIX format, and unsigned-for-submission workflow.
+- The packaged `StartupTask` + `uap10:Parameters="--tray"` approach and the test-identity local QA workflow.
 
 ## Open items (not approved or implemented)
 
@@ -170,3 +195,17 @@ These are possible future features. Do not implement them unless the user asks:
    - title-bar button: `0 -> 3 -> 0`
    - settings `SAVE`: `0 -> 4 -> 0`
 5. Launch the installed app and leave it running.
+
+For a Store package release:
+
+1. Run `.\package.cmd`.
+2. Confirm `dist\store\dispoSS_1.0.0.0_x64.msix` has the expected identity, version, x64
+   architecture, `runFullTrust`, and `uap10:Parameters="--tray"`.
+3. For local packaged QA, build and install the test package with
+   `.\store\test-package.ps1 -PfxPath <pfx> -PfxPassword <password> -Install -Force`.
+4. Smoke test activation, `--tray`, single-instance, region and full-screen capture,
+   clipboard copy, preview `COPY` / `SAVE` / `DISCARD`, save naming, settings, About, and
+   startup-task reconciliation under the test identity.
+5. Run the Windows App Certification Kit when it is available, then submit the final MSIX.
+6. After Store approval, add the Store link to `README.md` while keeping the GitHub/Inno
+   installer.

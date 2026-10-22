@@ -68,6 +68,11 @@ public partial class App : Application
                 {
                     AppLog.Error("Could not migrate the startup entry", exception);
                 }
+
+                if (PackageContext.IsPackaged && _settings.StartWithWindows)
+                {
+                    _ = StartupService.EnsureEnabledAsync();
+                }
             }
 
             _clipboard = new ClipboardService();
@@ -375,7 +380,7 @@ public partial class App : Application
         _mainWindow?.ShowSettings(_settings, IsDev);
     }
 
-    private void ApplySettings(AppSettings draft)
+    private async void ApplySettings(AppSettings draft)
     {
         if (_settings is null || _settingsService is null)
         {
@@ -420,7 +425,7 @@ public partial class App : Application
         {
             try
             {
-                StartupService.SetEnabled(_settings.StartWithWindows);
+                await StartupService.SetEnabledAsync(_settings.StartWithWindows);
             }
             catch (Exception exception)
             {

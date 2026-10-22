@@ -15,7 +15,11 @@ Download the latest Windows installer from GitHub Releases:
 
 The release page includes the SHA-256 checksum. The installer is about 3.88 MB, installs per user, and does not require administrator rights.
 
-The current build is **v0.1.0** and is unsigned. Windows SmartScreen may show an "Unknown publisher" warning on first launch. A code-signing certificate is the next distribution improvement.
+The latest GitHub release is **v0.1.0**; the Store build is **v1.0.0** and is in submission. The GitHub installer is unsigned, so Windows SmartScreen may show an "Unknown publisher" warning on first launch.
+
+## Microsoft Store
+
+dispoSS is being submitted to the Microsoft Store as an x64 MSIX. Store installs are signed by Microsoft and avoid the unsigned-publisher SmartScreen warning. The Store listing is not live yet; this section will get the link after certification. The GitHub installer remains available.
 
 ## Features
 
@@ -126,6 +130,7 @@ From the repository root:
 .\dev.cmd        # dotnet watch with hot reload and dev settings
 .\publish.cmd    # Framework-dependent release build in dist\win-x64
 .\installer.cmd  # Build the Windows installer in dist
+.\package.cmd    # Build the x64 Microsoft Store MSIX in dist\store
 ```
 
 `dotnet watch` hot-reloads C# changes. XAML changes trigger a rebuild and app restart rather than a live visual refresh.
@@ -152,6 +157,18 @@ dist\dispoSS-Setup.exe
 ```
 
 Build and verify the installer on a clean Windows 10/11 machine before publishing a release. Test as a standard user, with SmartScreen enabled, and without developer tools installed.
+
+## Build the Microsoft Store package
+
+`package.cmd` publishes the x64 release build, stages the MSIX payload, and writes:
+
+```text
+dist\store\dispoSS_1.0.0.0_x64.msix
+```
+
+The MSIX is built with `MakeAppx` from NuGet `Microsoft.Windows.SDK.BuildTools`; Visual Studio and a Windows Application Packaging Project are not required. The final package is intentionally unsigned for Store submission because Microsoft re-signs Store packages.
+
+Local packaged QA uses the test identity `PaperCraneLabs.DispoSSTest`; the reserved Store identity cannot be activated locally. See [`store/SUBMISSION.md`](store/SUBMISSION.md) and [`store/test-package.ps1`](store/test-package.ps1) for the test-signing workflow, listing copy, and certification notes.
 
 ## Testing without a mouse
 
@@ -213,11 +230,11 @@ Read the full [privacy policy](PRIVACY.md).
 
 ## Distribution
 
-GitHub Releases is the primary download channel. A **winget** package is planned after the first stable release. The app itself does not check for updates; use the release page or winget to install a newer version.
+GitHub Releases is the primary direct-download channel. The Microsoft Store MSIX is in submission; the Store link will be added here after approval. A **winget** package is planned after the first stable release. The app itself does not check for updates; use the release page or the Store listing to install a newer version.
 
 ## Known limitations
 
-- The installer is unsigned. Windows SmartScreen may warn when it is downloaded or launched on another machine.
+- The GitHub installer is unsigned. Windows SmartScreen may warn when it is downloaded or launched on another machine. The Store MSIX is re-signed by Microsoft.
 - Region selection does not span multiple monitors.
 - No annotation, scrolling capture, OCR, or screenshot history.
 - No automatic updater.

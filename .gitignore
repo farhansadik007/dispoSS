@@ -483,3 +483,6 @@ $RECYCLE.BIN/
 
 # Local publish output
 dist/
+
+# Store listing raw window captures (local-only; final screenshots are committed)
+store/listing/_raw-*.png

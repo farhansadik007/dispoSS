@@ -139,6 +139,7 @@ public partial class PreviewWindow : Window
 
             using var stream = File.Create(dialog.FileName);
             encoder.Save(stream);
+            AppLog.Info($"Saved screenshot to {dialog.FileName}.");
             SetStatus("Saved");
             AutoCloseText.Text = "Saved to disk";
             _remainingSeconds = 0;
