@@ -172,9 +172,9 @@ Behavior details:
   administrator rights.
 - Store listing assets live under `store\listing`. Submission copy, URLs, age rating, and
   certification notes live in `store\SUBMISSION.md`.
-- The Store listing app icon is exactly 300×300, downscaled from
-  `store\Assets\Square310x310Logo.png`. The package asset stays 310×310 for its manifest tile
-  slot. Do not upload the 310×310 package asset as the listing logo.
+- The Store listing app icon and `store\Assets\Square310x310Logo.png` are exactly 300×300.
+  The package manifest keeps the `Square310x310Logo.png` slot name and Windows scales the
+  300×300 artwork into it.
 - Keep the existing GitHub/Inno installer as the direct-download channel alongside the Store.
 
 ## Do not change without explicit approval
@@ -191,7 +191,7 @@ Behavior details:
 - The Store package identity, publisher, x64 full-trust MSIX format, and unsigned-for-submission workflow.
 - The MSIX square logo treatment: full-bleed Store artwork, 15% rounded corners, and the
   `resources.pri` unplated assets. Do not regenerate or alter the logo.
-- The 300×300 Store listing logo derived from `Square310x310Logo.png`; keep it at 300×300.
+- The 300×300 Store listing logo and app icon asset; keep both at 300×300.
 - The packaged `StartupTask` + `uap10:Parameters="--tray"` approach and the test-identity local QA workflow.
 
 ## Open items (not approved or implemented)

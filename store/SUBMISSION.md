@@ -239,12 +239,10 @@ and are ignored by git. `compose.ps1` rebuilds the final screenshots when the UI
 `StoreListingLogo-fullbleed.png` is the full-bleed source for the MSIX square assets; do not
 upload it to the Store listing.
 
-The 300×300 `StoreListingLogo.png` is a downscaled copy of the packaged app icon
-(`store/Assets/Square310x310Logo.png`), so the Store listing uses the same rounded, transparent
-app artwork at the 300×300 size Partner Center expects. The package keeps
-`Square310x310Logo.png` at 310×310 because that is the manifest tile slot; Windows paints the
-declared `BackgroundColor="#0B1B2B"` behind the transparent corners. Do not upload the
-310×310 package asset directly as the Store listing logo.
+The 300×300 `StoreListingLogo.png` is an exact copy of the app icon asset
+(`store/Assets/Square310x310Logo.png`), which is also 300×300. The manifest slot keeps the
+`Square310x310Logo.png` file name; Windows scales the 300×300 artwork into that tile slot.
+Windows paints the declared `BackgroundColor="#0B1B2B"` behind the transparent corners.
 
 ## Submission checklist
 
