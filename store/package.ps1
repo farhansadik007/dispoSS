@@ -36,9 +36,13 @@ $nugetRoot = (($nugetLine -split ':\s*', 2)[1]).Trim()
 $buildToolsVersion = '10.0.26100.9169'
 $sdkVersion = '10.0.26100.0'
 $makeAppx = Join-Path $nugetRoot "microsoft.windows.sdk.buildtools\$buildToolsVersion\bin\$sdkVersion\x64\makeappx.exe"
+$makePri = Join-Path $nugetRoot "microsoft.windows.sdk.buildtools\$buildToolsVersion\bin\$sdkVersion\x64\makepri.exe"
 
 if (-not (Test-Path $makeAppx)) {
     throw "makeappx.exe was not found at $makeAppx. Restore store\BuildTools.csproj and try again."
+}
+if (-not (Test-Path $makePri)) {
+    throw "makepri.exe was not found at $makePri. Restore store\BuildTools.csproj and try again."
 }
 
 $storeDir = Join-Path $root 'dist\store'
@@ -57,6 +61,17 @@ Get-ChildItem $publishDir -File | ForEach-Object {
 
 Copy-Item 'store\Package.appxmanifest' (Join-Path $stageDir 'AppxManifest.xml') -Force
 Copy-Item 'store\Assets' $stageDir -Recurse -Force
+
+[xml]$manifest = Get-Content (Join-Path $stageDir 'AppxManifest.xml') -Raw
+$identityName = $manifest.Package.Identity.Name
+
+Write-Host 'Generating the package resource index...'
+$priConfig = Join-Path $root 'store\priconfig.xml'
+$priPath = Join-Path $stageDir 'resources.pri'
+& $makePri new /pr $stageDir /cf $priConfig /mn (Join-Path $stageDir 'AppxManifest.xml') /in $identityName /of $priPath /o
+if ($LASTEXITCODE -ne 0) {
+    throw "makepri failed with exit code $LASTEXITCODE."
+}
 
 Write-Host "Packing $packagePath ..."
 & $makeAppx pack /d $stageDir /p $packagePath /o

@@ -61,6 +61,23 @@ if (-not (Test-Path $makeAppx)) {
     throw "makeappx.exe was not found at $makeAppx."
 }
 
+$makePri = Join-Path $nugetRoot "microsoft.windows.sdk.buildtools\$buildToolsVersion\bin\$sdkVersion\x64\makepri.exe"
+if (-not (Test-Path $makePri)) {
+    throw "makepri.exe was not found at $makePri."
+}
+
+# The copied PRI was indexed for the Store identity. Regenerate it for the test
+# identity so the taskbar and other shell surfaces resolve the test package assets.
+$priPath = Join-Path $testStage 'resources.pri'
+if (Test-Path $priPath) {
+    Remove-Item $priPath -Force
+}
+Write-Host 'Generating the test package resource index...'
+& $makePri new /pr $testStage /cf (Join-Path $root 'store\priconfig.xml') /mn $manifestPath /in $IdentityName /of $priPath /o
+if ($LASTEXITCODE -ne 0) {
+    throw "makepri failed with exit code $LASTEXITCODE."
+}
+
 $unsignedPath = Join-Path $testRoot "dispoSSTest_${version}_x64.msix"
 $signedPath = Join-Path $testRoot "dispoSSTest_${version}_x64.test-signed.msix"
 

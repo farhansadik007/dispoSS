@@ -28,17 +28,20 @@ dist\store\dispoSS_1.0.0.0_x64.msix
 Current size and hash (recompute after any rebuild):
 
 ```text
-2,796,624 bytes
-SHA-256 315B7BB5562CDF6B365523D4346107F552141DA0189E6E10909C0416B304F75C
+2,805,653 bytes
+SHA-256 1805B0E614CAD05DC1BB5AA70C9CECF76A034AF1422CB247A5852A91E3724AB4
 ```
 
 The final package is intentionally **unsigned**. Microsoft re-signs Store submissions.
 Do not upload the test-signed package from `store/test-package.ps1`.
 
 The package includes unplated `Square44x44Logo.targetsize-*_altform-unplated.png` and
-`..._altform-lightunplated.png` assets. These keep the taskbar, Alt+Tab, and the lower-right
-corner of Start at full size; without them Windows shrinks the logo onto a square
-`BackgroundColor` plate.
+`..._altform-lightunplated.png` assets plus `resources.pri`. MakePri must index the package
+so Windows uses the unplated assets; without the PRI, Windows ignores them and shrinks the
+logo onto a square `BackgroundColor` plate. The square assets are generated from the
+full-bleed `store/listing/StoreListingLogo.png` artwork with a 15% rounded-corner mask, so the
+taskbar icon fills the full slot while keeping rounded edges. This logo treatment is approved
+as-is; do not regenerate or alter it.
 
 ## Build
 
@@ -237,9 +240,9 @@ and are ignored by git. `compose.ps1` rebuilds the final screenshots when the UI
 The 300×300 `StoreListingLogo.png` is deliberately flattened to a full square. The original
 app icon has transparent rounded corners; Partner Center renders those corners as black, which
 makes the logo look smaller and black-bordered. The flattened version extends the artwork's
-edge colors into the corners so the Store listing shows a full-bleed logo. The MSIX tile
-images keep their transparent rounded corners because Windows paints the declared
-`BackgroundColor="#0B1B2B"` behind them.
+edge colors into the corners so the Store listing shows a full-bleed logo. The MSIX square
+images use the same full-bleed artwork with rounded transparent corners; Windows paints the
+declared `BackgroundColor="#0B1B2B"` behind them.
 
 ## Submission checklist
 
