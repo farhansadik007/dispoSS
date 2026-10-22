@@ -17,7 +17,7 @@ Last approved: 2026-10-22
 - Native Windows app built with C# / WPF on **.NET Framework 4.8**. Do not move to a bundled runtime, Electron, or a web UI.
 - Targets **Windows 10 1903+** and **Windows 11**.
 - Per-user install, **no administrator rights**.
-- Keep the app and installer **under 15 MB** combined. Current installer is about **2.73 MB**.
+- Keep the app and installer **under 15 MB** combined. Current installer is about **3.88 MB**.
 - Clipboard-first. Nothing is written to disk unless the user explicitly clicks **Save**.
 - No networking, no uploads, no history, no automatic screenshot files.
 
