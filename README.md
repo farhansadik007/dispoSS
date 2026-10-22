@@ -4,12 +4,23 @@ A tiny native Windows screenshot utility for quick, throwaway captures.
 
 Press **Ctrl+Alt+S**, wait for the countdown, drag a region, and the image is copied to the clipboard. A small preview lets you save it or discard it. Nothing is written to disk unless you explicitly click **Save**.
 
-Built with **C# / WPF on .NET Framework 4.8** - no Electron, no browser, no background cloud service.
+Built with **C# / WPF on .NET Framework 4.8** - no Electron, no browser, and no background cloud service.
+
+## Download
+
+Download the latest Windows installer from GitHub Releases:
+
+- [Latest release](https://github.com/farhansadik007/dispoSS/releases/latest)
+- [Direct installer download](https://github.com/farhansadik007/dispoSS/releases/latest/download/dispoSS-Setup.exe)
+
+The release page includes the SHA-256 checksum. The installer is about 3.88 MB, installs per user, and does not require administrator rights.
+
+The current build is **v0.1.0** and is unsigned. Windows SmartScreen may show an "Unknown publisher" warning on first launch. A code-signing certificate is the next distribution improvement.
 
 ## Features
 
 - Visible main window with **Capture region**, **Capture full screen**, and **Settings** buttons
-- Global hotkey: **Ctrl+Alt+S**
+- Global hotkey configurable as **Ctrl + one non-modifier key**; default is **Ctrl+Alt+S**
 - Countdown timer before the screen is frozen (default 3 seconds)
 - Region capture on the monitor where you start the capture
 - Full-screen capture across the entire virtual desktop
@@ -20,13 +31,91 @@ Built with **C# / WPF on .NET Framework 4.8** - no Electron, no browser, no back
 - System tray menu with capture, delay, settings, and exit
 - Optional "start with Windows" entry
 - Settings persisted per user
-- No history, no temp screenshot files, no automatic uploads
+- About page with photo, bio, social links, and a SupportKori link
+- No screenshot history, no temp screenshot files, no automatic uploads
 
 ## Requirements
 
 - Windows 10 (1903+) or Windows 11
-- For development: .NET SDK **10.0.402** or newer
 - .NET Framework **4.8** or newer (included with supported Windows 10 and Windows 11 versions)
+- For development: .NET SDK **10.0.402** or newer
+
+## Install from the release
+
+Run `dispoSS-Setup.exe` from the [latest release](https://github.com/farhansadik007/dispoSS/releases/latest).
+
+It installs per user, so no administrator rights are required. The default location is:
+
+```text
+%LOCALAPPDATA%\Programs\dispoSS
+```
+
+The installer adds Start Menu and desktop shortcuts. If the app is already running, setup closes it and continues. After installation the app opens its main window and also lives in the system tray. To remove it, use **Settings > Apps > Installed apps**, or run the uninstaller in the install folder.
+
+## Verify the download
+
+Each release includes `SHA256SUMS.txt`. Compare it with the downloaded installer:
+
+```powershell
+Get-FileHash .\dispoSS-Setup.exe -Algorithm SHA256
+```
+
+A checksum confirms the file matches the published release, but it is not a substitute for code signing or SmartScreen reputation.
+
+## Usage
+
+1. Start the app. It opens a small main window and also lives in the system tray.
+2. Click **Capture region** or **Capture full screen**, press the configured hotkey, or use the tray menu.
+3. Wait for the countdown.
+4. Drag to select a region, or let the full-screen capture finish.
+5. Use the preview toast to copy, save, or discard.
+6. Press **Esc** or right-click to cancel the selection.
+7. Press the global hotkey again during the countdown or selection to cancel.
+
+Saving a capture uses this filename by default:
+
+```text
+dispoSS_YYYY-MM-DD-HH-mm-ss.png
+```
+
+Closing the main window leaves the app running in the system tray. Double-click the tray icon, choose **Open dispoSS** from its menu, or launch the desktop/Start Menu shortcut again to bring the window back. Launching the shortcut while the app is running activates the existing window instead of starting a duplicate.
+
+The title bar contains minimize, settings, and close buttons. The footer contains **SETTINGS**, **HIDE TO TRAY**, and **EXIT**. The About panel opens over the capture view and includes the supplied photo, bio, social links, and a support link.
+
+## Settings
+
+Open the main window and click **Settings** at the bottom of the window, or use **Settings** in the tray menu.
+
+Settings slides in over the capture view inside the same window. **Save** applies the changes; **Cancel** or **Esc** returns without saving.
+
+The in-window settings panel controls:
+
+- Countdown delay
+- Automatic clipboard copy
+- Preview visibility and timeout
+- Clipboard auto-clear interval
+- Start with Windows
+- Capture hotkey: **Ctrl + one non-modifier key**
+
+The default hotkey is `Ctrl+Alt+S`. Choose **Capture hotkey** in Settings and press a new `Ctrl + key` combination. The selection is saved and re-registered immediately.
+
+Settings are stored in:
+
+```text
+%APPDATA%\dispoSS\settings.json
+```
+
+Dev mode uses a separate file:
+
+```text
+%APPDATA%\dispoSS-dev\settings.json
+```
+
+Logs are written to:
+
+```text
+%LOCALAPPDATA%\dispoSS\app.log
+```
 
 ## Commands
 
@@ -47,21 +136,7 @@ The published executable is:
 dist\win-x64\dispoSS.exe
 ```
 
-## Install
-
-Run the setup program:
-
-```text
-dist\dispoSS-Setup.exe
-```
-
-It installs per user, so no administrator rights are required. The default location is:
-
-```text
-%LOCALAPPDATA%\Programs\dispoSS
-```
-
-The installer adds a Start Menu shortcut and a desktop shortcut by default. If the app is already running, setup closes it and continues. After installation the app opens its main window and also lives in the system tray. To remove it, use **Settings > Apps > Installed apps**, or run the uninstaller in the install folder.
+## Build the installer
 
 `installer.cmd` rebuilds the setup program. It requires Inno Setup 6:
 
@@ -70,21 +145,15 @@ winget install JRSoftware.InnoSetup
 .\installer.cmd
 ```
 
-The installer is unsigned, so Windows SmartScreen may show a warning on first launch. Choose **More info > Run anyway** if you built it yourself. A code-signing certificate would remove that warning for distribution.
+The installer output is:
 
-## Usage
+```text
+dist\dispoSS-Setup.exe
+```
 
-1. Start the app. It opens a small main window and also lives in the system tray.
-2. Click **Capture region** or **Capture full screen**, press **Ctrl+Alt+S**, or use the tray menu.
-3. Wait for the countdown.
-4. Drag to select a region, or let the full-screen capture finish.
-5. Use the preview toast to copy, save, or discard.
-6. Press **Esc** or right-click to cancel the selection.
-7. Press the global hotkey again during the countdown or selection to cancel.
+Build and verify the installer on a clean Windows 10/11 machine before publishing a release. Test as a standard user, with SmartScreen enabled, and without developer tools installed.
 
-Closing the main window leaves the app running in the system tray. Double-click the tray icon, choose **Open dispoSS** from its menu, or launch the desktop/Start Menu shortcut again to bring the window back. Launching the shortcut while the app is running activates the existing window instead of starting a duplicate.
-
-### Testing without a mouse
+## Testing without a mouse
 
 The app accepts two command-line arguments for smoke testing:
 
@@ -96,40 +165,6 @@ The app accepts two command-line arguments for smoke testing:
 These still use the configured countdown. They are intended for development and automation, not as a general CLI interface.
 
 `--tray` starts the app without showing the main window. The Windows startup entry uses this flag.
-
-## Settings
-
-Settings are stored in:
-
-```text
-%APPDATA%\dispoSS\settings.json
-```
-
-Dev mode uses a separate file:
-
-```text
-%APPDATA%\dispoSS-dev\settings.json
-```
-
-Logs are written to:
-
-```text
-%LOCALAPPDATA%\dispoSS\app.log
-```
-
-Open the main window and click **Settings** at the bottom of the window, or use **Settings** in the tray menu.
-
-Settings slides in over the capture view inside the same window. Save applies the changes; Cancel or Escape returns without saving.
-
-The in-window settings panel controls:
-
-- Countdown delay
-- Automatic clipboard copy
-- Preview visibility and timeout
-- Clipboard auto-clear interval
-- Start with Windows
-
-The global hotkey is fixed to `Ctrl+Alt+S` in this build. Rebindable hotkeys are the next obvious addition.
 
 ## How it works
 
@@ -170,12 +205,22 @@ Important implementation files:
 - The app targets .NET Framework 4.8 and uses the WPF that ships with supported Windows versions, keeping the distribution small without a bundled runtime. The main window, in-window settings panel, preview toast, countdown card, and tray menu use the custom sunset retro theme; the selection overlay stays custom-drawn and positioned for tight control over capture behavior.
 - Body text uses the bundled Pixel Operator 8 font. Display headings use the bundled 04b_30 font, rendered aliased for crisp pixel edges.
 
-## Known limitations / next up
+## Privacy
 
-- The global hotkey is not editable from the UI yet.
-- Region selection does not span multiple monitors.
-- No annotation, scrolling capture, OCR, or history.
+dispoSS does not contain networking code. Captures remain in memory and, if you choose, on the clipboard or in a file you explicitly save. Settings and a small diagnostic log are written locally; the log does not contain screenshot pixels or clipboard contents.
+
+Read the full [privacy policy](PRIVACY.md).
+
+## Distribution
+
+GitHub Releases is the primary download channel. A **winget** package is planned after the first stable release. The app itself does not check for updates; use the release page or winget to install a newer version.
+
+## Known limitations
+
 - The installer is unsigned. Windows SmartScreen may warn when it is downloaded or launched on another machine.
+- Region selection does not span multiple monitors.
+- No annotation, scrolling capture, OCR, or screenshot history.
+- No automatic updater.
 - Real mouse/keyboard interaction must be tested on an unlocked desktop. The app cannot receive local input while Windows is showing the lock screen.
 - `dotnet watch` restarts on XAML changes instead of doing true live XAML reload.
 
@@ -183,7 +228,16 @@ Important implementation files:
 
 - **Pixel Operator 8** by Jayvee Enaguas (HarvettFonts), used for body and control text (CC0 1.0, public domain).
 - **04b_30** by 04 / Yuji Oshimoto, used for display headings ([DaFont](https://www.dafont.com/04b-30.font)).
+- Social icons derived from [Simple Icons](https://simpleicons.org/) (CC0 1.0); brand logos remain trademarks of their owners.
 
-## Privacy
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for details.
 
-dispoSS does not contain networking code. Captures remain in memory and, if you choose, on the clipboard or in a file you explicitly save.
+## License
+
+MIT License. See [LICENSE](LICENSE). Third-party components and assets are covered by their own terms.
+
+## Support
+
+If dispoSS is useful to you, you can support the project here:
+
+https://www.supportkori.com/farhansadik007
