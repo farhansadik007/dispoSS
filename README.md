@@ -1,127 +1,149 @@
-# dispoSS
+<p align="center">
+  <img src="store/listing/StoreListingLogo.png" width="112" alt="dispoSS app icon">
+</p>
 
-A tiny native Windows screenshot utility for quick, throwaway captures.
+<h1 align="center">dispoSS</h1>
 
-Press **Ctrl+Alt+S**, wait for the countdown, drag a region, and the image is copied to the clipboard. A small preview lets you save it or discard it. Nothing is written to disk unless you explicitly click **Save**.
+<p align="center">
+  <strong>Clipboard-first screenshots for Windows.</strong><br>
+  Quick. Private. Gone.
+</p>
 
-Built with **C# / WPF on .NET Framework 4.8** - no Electron, no browser, and no background cloud service.
+<p align="center">
+  <a href="https://github.com/farhansadik007/dispoSS/releases/latest">Download for Windows</a>
+  ·
+  <a href="PRIVACY.md">Privacy</a>
+  ·
+  <a href="https://www.supportkori.com/farhansadik007">Support the project</a>
+</p>
 
-## Download
+<p align="center">
+  <strong>Microsoft Store — coming soon</strong>
+</p>
 
-Download the latest Windows installer from GitHub Releases:
+<p align="center">
+  <img src="store/listing/Screenshot-1-Main.png" alt="dispoSS main window" width="760">
+</p>
 
-- [Latest release](https://github.com/farhansadik007/dispoSS/releases/latest)
-- [Direct installer download](https://github.com/farhansadik007/dispoSS/releases/latest/download/dispoSS-Setup.exe)
+## The idea
 
-The release page includes the SHA-256 checksum. The installer is about 3.88 MB, installs per user, and does not require administrator rights.
+Most screenshot tools want to become a library, a workspace, or a cloud account. dispoSS goes the other way.
 
-The latest GitHub release is **v0.1.0**; the Store build is **v1.0.0** and is in submission. The GitHub installer is unsigned, so Windows SmartScreen may show an "Unknown publisher" warning on first launch.
+Press a hotkey, wait for the countdown, drag a region, and the capture is already on your clipboard. A small preview lets you copy it again, save it, or throw it away. Nothing is written to disk unless you click **Save**.
 
-## Microsoft Store
+It is a small native Windows app built with **C# / WPF on .NET Framework 4.8** — no Electron, no bundled browser, no background service, and no networking code.
 
-dispoSS is being submitted to the Microsoft Store as an x64 MSIX. Store installs are signed by Microsoft and avoid the unsigned-publisher SmartScreen warning. The Store listing is not live yet; this section will get the link after certification. The GitHub installer remains available.
+## Screenshots
+
+| Capture | Settings |
+| --- | --- |
+| ![Capture screen](store/listing/Screenshot-1-Main.png) | ![Settings screen](store/listing/Screenshot-2-Settings.png) |
+| **Preview** | **About** |
+| ![Preview screen](store/listing/Screenshot-3-Preview.png) | ![About screen](store/listing/Screenshot-4-About.png) |
 
 ## Features
 
-- Visible main window with **Capture region**, **Capture full screen**, and **Settings** buttons
-- Global hotkey configurable as **Ctrl + one non-modifier key**; default is **Ctrl+Alt+S**
-- Countdown timer before the screen is frozen (default 3 seconds)
-- Region capture on the monitor where you start the capture
-- Full-screen capture across the entire virtual desktop
-- Clipboard-first output
-- Preview toast with **Copy**, **Save**, and **Discard**
-- Optional preview timeout that pauses while hovered
+### Capture the way you want
+
+- **Region capture** on the monitor where the selection starts
+- **Full-screen capture** across the entire virtual desktop
+- Global hotkey configurable as **Ctrl + one non-modifier key** (default `Ctrl+Alt+S`)
+- Countdown delay before the screen is frozen
+- Capture from the main window, the tray menu, or the hotkey
+- `Esc` or right-click cancels selection; pressing the hotkey again also cancels
+
+### Clipboard first, disk second
+
+- Every capture is copied to the clipboard
+- Preview actions: **Copy**, **Save**, **Discard**
+- Optional preview that closes itself, and pauses while hovered
 - Optional clipboard auto-clear that only clears the image if it is still ours
-- System tray menu with capture, delay, settings, and exit
-- Optional "start with Windows" entry
-- Settings persisted per user
-- About page with photo, bio, social links, and a SupportKori link
-- No screenshot history, no temp screenshot files, no automatic uploads
+- No screenshot history, no temp capture files, no automatic saves
+- Default save name: `dispoSS_YYYY-MM-DD-HH-mm-ss.png`
 
-## Requirements
+### Native Windows behavior
 
-- Windows 10 (1903+) or Windows 11
-- .NET Framework **4.8** or newer (included with supported Windows 10 and Windows 11 versions)
-- For development: .NET SDK **10.0.402** or newer
+- .NET Framework **4.8** WPF app, not a web wrapper
+- Per-monitor DPI aware (`PerMonitorV2`)
+- Single-instance: launching it again brings back the existing window
+- Closing the window hides to the system tray instead of exiting
+- Optional **Start with Windows**
+- Per-user install, no administrator rights
+- GitHub installer is unsigned; the Microsoft Store build will be Microsoft-signed
 
-## Install from the release
+### Small details
 
-Run `dispoSS-Setup.exe` from the [latest release](https://github.com/farhansadik007/dispoSS/releases/latest).
+- Sunset retro visual theme with pixel typography
+- In-window settings panel with **Save** / **Cancel**
+- About panel with photo, bio, and social links
+- Body text uses **Pixel Operator 8**; display headings use **04b_30**
+- The app is intentionally quiet: no account, no onboarding, no telemetry
 
-It installs per user, so no administrator rights are required. The default location is:
+## Microsoft Store
+
+The Microsoft Store version is **coming soon**.
+
+dispoSS has been submitted as an x64 full-trust MSIX. Store installs will be signed by Microsoft and will avoid the unsigned-publisher SmartScreen warning from the GitHub installer. The GitHub release remains available as the direct-download channel.
+
+> Store link will be added here after certification.
+
+## Install
+
+### GitHub Releases (available now)
+
+1. Open the [latest release](https://github.com/farhansadik007/dispoSS/releases/latest).
+2. Download `dispoSS-Setup.exe`.
+3. Run it. The install is per user and does not require administrator rights.
+
+Default install location:
 
 ```text
 %LOCALAPPDATA%\Programs\dispoSS
 ```
 
-The installer adds Start Menu and desktop shortcuts. If the app is already running, setup closes it and continues. After installation the app opens its main window and also lives in the system tray. To remove it, use **Settings > Apps > Installed apps**, or run the uninstaller in the install folder.
+The installer adds Start Menu and desktop shortcuts. If the app is already running, setup closes it and continues.
+
+### Microsoft Store
+
+Coming soon. Once live, the Store listing will be linked here.
 
 ## Verify the download
 
-Each release includes `SHA256SUMS.txt`. Compare it with the downloaded installer:
+Each release includes `SHA256SUMS.txt`.
 
 ```powershell
 Get-FileHash .\dispoSS-Setup.exe -Algorithm SHA256
 ```
 
-A checksum confirms the file matches the published release, but it is not a substitute for code signing or SmartScreen reputation.
+A matching checksum confirms the file matches the published release. It is not a substitute for code signing or SmartScreen reputation.
 
-## Usage
+## Privacy
 
-1. Start the app. It opens a small main window and also lives in the system tray.
-2. Click **Capture region** or **Capture full screen**, press the configured hotkey, or use the tray menu.
-3. Wait for the countdown.
-4. Drag to select a region, or let the full-screen capture finish.
-5. Use the preview toast to copy, save, or discard.
-6. Press **Esc** or right-click to cancel the selection.
-7. Press the global hotkey again during the countdown or selection to cancel.
+dispoSS does not contain networking code. Captures stay in memory and, if you choose, on the clipboard or in a file you explicitly save. Settings and a small diagnostic log are stored locally; the log does not contain screenshot pixels or clipboard contents.
 
-Saving a capture uses this filename by default:
+Read the full [privacy policy](PRIVACY.md).
 
-```text
-dispoSS_YYYY-MM-DD-HH-mm-ss.png
-```
+## Under the hood
 
-Closing the main window leaves the app running in the system tray. Double-click the tray icon, choose **Open dispoSS** from its menu, or launch the desktop/Start Menu shortcut again to bring the window back. Launching the shortcut while the app is running activates the existing window instead of starting a duplicate.
+The capture flow is deliberately simple:
 
-The title bar contains minimize, settings, and close buttons. The footer contains **SETTINGS**, **HIDE TO TRAY**, and **EXIT**. The About panel opens over the capture view and includes the supplied photo, bio, social links, and a support link.
+1. The countdown runs before touching the screen, so menus and hover states can settle.
+2. A GDI snapshot of the virtual desktop is taken once.
+3. An opaque, topmost overlay is created per monitor from that frozen snapshot.
+4. The selection rectangle is mapped from overlay DIPs back to physical pixels.
+5. The frozen image is cropped and optionally copied to the clipboard.
+6. The preview holds the image in memory until it closes or you save it.
 
-## Settings
+The app uses `RegisterHotKey` for the global hotkey, a hidden `HwndSource`, WPF for the interface, and the system tray for background access.
 
-Open the main window and click **Settings** at the bottom of the window, or use **Settings** in the tray menu.
+<details>
+<summary><strong>Build from source</strong></summary>
 
-Settings slides in over the capture view inside the same window. **Save** applies the changes; **Cancel** or **Esc** returns without saving.
+Requirements:
 
-The in-window settings panel controls:
-
-- Countdown delay
-- Automatic clipboard copy
-- Preview visibility and timeout
-- Clipboard auto-clear interval
-- Start with Windows
-- Capture hotkey: **Ctrl + one non-modifier key**
-
-The default hotkey is `Ctrl+Alt+S`. Choose **Capture hotkey** in Settings and press a new `Ctrl + key` combination. The selection is saved and re-registered immediately.
-
-Settings are stored in:
-
-```text
-%APPDATA%\dispoSS\settings.json
-```
-
-Dev mode uses a separate file:
-
-```text
-%APPDATA%\dispoSS-dev\settings.json
-```
-
-Logs are written to:
-
-```text
-%LOCALAPPDATA%\dispoSS\app.log
-```
-
-## Commands
+- Windows 10 (1903+) or Windows 11
+- .NET Framework 4.8
+- .NET SDK **10.0.402** or newer for development
 
 From the repository root:
 
@@ -129,116 +151,76 @@ From the repository root:
 .\build.cmd      # Debug build
 .\dev.cmd        # dotnet watch with hot reload and dev settings
 .\publish.cmd    # Framework-dependent release build in dist\win-x64
-.\installer.cmd  # Build the Windows installer in dist
+.\installer.cmd  # Build the Windows installer in dist (requires Inno Setup 6)
 .\package.cmd    # Build the x64 Microsoft Store MSIX in dist\store
 ```
 
 `dotnet watch` hot-reloads C# changes. XAML changes trigger a rebuild and app restart rather than a live visual refresh.
 
-The published executable is:
-
-```text
-dist\win-x64\dispoSS.exe
-```
-
-## Build the installer
-
-`installer.cmd` rebuilds the setup program. It requires Inno Setup 6:
+`installer.cmd` requires [Inno Setup 6](https://jrsoftware.org/isinfo.php):
 
 ```powershell
 winget install JRSoftware.InnoSetup
 .\installer.cmd
 ```
 
-The installer output is:
+The installer output is `dist\dispoSS-Setup.exe`. The Store package output is `dist\store\dispoSS_1.0.0.0_x64.msix`. See [`store/SUBMISSION.md`](store/SUBMISSION.md) for the Store listing and test-signing workflow.
 
-```text
-dist\dispoSS-Setup.exe
-```
-
-Build and verify the installer on a clean Windows 10/11 machine before publishing a release. Test as a standard user, with SmartScreen enabled, and without developer tools installed.
-
-## Build the Microsoft Store package
-
-`package.cmd` publishes the x64 release build, stages the MSIX payload, and writes:
-
-```text
-dist\store\dispoSS_1.0.0.0_x64.msix
-```
-
-The MSIX is built with `MakeAppx` from NuGet `Microsoft.Windows.SDK.BuildTools`; Visual Studio and a Windows Application Packaging Project are not required. The final package is intentionally unsigned for Store submission because Microsoft re-signs Store packages.
-
-Local packaged QA uses the test identity `PaperCraneLabs.DispoSSTest`; the reserved Store identity cannot be activated locally. See [`store/SUBMISSION.md`](store/SUBMISSION.md) and [`store/test-package.ps1`](store/test-package.ps1) for the test-signing workflow, listing copy, and certification notes.
-
-## Testing without a mouse
-
-The app accepts two command-line arguments for smoke testing:
+For smoke testing without a mouse:
 
 ```powershell
 .\src\DisposableScreenshots\bin\Debug\net48\dispoSS.exe --capture
 .\src\DisposableScreenshots\bin\Debug\net48\dispoSS.exe --capture-full
+.\src\DisposableScreenshots\bin\Debug\net48\dispoSS.exe --tray
 ```
 
-These still use the configured countdown. They are intended for development and automation, not as a general CLI interface.
+</details>
 
-`--tray` starts the app without showing the main window. The Windows startup entry uses this flag.
+<details>
+<summary><strong>Project structure</strong></summary>
 
-## How it works
-
-The capture flow is deliberately simple:
-
-1. The countdown runs before touching the screen, so menus and hover states can settle.
-2. A GDI snapshot of the virtual desktop is taken once.
-3. An opaque, topmost overlay is created per monitor using that frozen snapshot. The snapshot is a separate layer from the selection canvas, so moving the mouse does not repaint the full screenshot.
-4. The selection rectangle is mapped from overlay DIPs back to physical pixels.
-5. The frozen image is cropped and optionally copied to the clipboard.
-6. The preview window holds the image in memory until it closes or you save it.
-
-Important implementation files:
-
-| File | Responsibility |
+| Path | Responsibility |
 | --- | --- |
 | `src/DisposableScreenshots/App.xaml.cs` | Startup, tray, hotkey, single instance, settings application |
-| `Views/MainWindow.xaml.cs` | Capture view, in-window settings transition, window actions |
+| `Views/MainWindow.xaml.cs` | Capture view, settings transition, window actions |
 | `Controls/SettingsPanel.xaml.cs` | In-window settings panel and draft settings |
-| `Themes/SunsetTheme.xaml` | Sunset palette, pixel controls, rounded frame, preview/countdown, and tray menu styles |
+| `Themes/SunsetTheme.xaml` | Sunset palette, pixel controls, rounded frame, preview/countdown styles |
 | `Services/CaptureCoordinator.cs` | Countdown, snapshot, overlays, preview orchestration |
 | `Services/ScreenCaptureService.cs` | GDI desktop snapshot and pixel cropping |
-| `Services/ScreenService.cs` | Monitor enumeration and DPI-aware bounds |
 | `Services/HotkeyService.cs` | `RegisterHotKey` + hidden `HwndSource` |
 | `Services/ClipboardService.cs` | Clipboard image data and conditional auto-clear |
-| `Services/TrayService.cs` | Tray icon and menu |
-| `Views/SelectionCanvas.cs` | Dark mask, selection rectangle, size badge |
-| `Views/CaptureOverlayWindow.xaml.cs` | Per-monitor overlay positioning and DPI mapping |
 | `Views/PreviewWindow.xaml.cs` | Copy/save/discard toast |
+
+</details>
 
 ## Design notes
 
-- The desktop is frozen **after** the countdown. The countdown itself is not part of the screenshot.
-- Region selection is intentionally limited to one monitor at a time in this version. Full-screen capture spans all monitors.
-- The app is single-instance. Launching a second copy activates the existing window and exits.
-- The app is per-monitor DPI aware (`PerMonitorV2`).
-- The clipboard auto-clear timer only clears the clipboard if the custom marker data is still present. If you copied something else in the meantime, it leaves your clipboard alone.
-- The app targets .NET Framework 4.8 and uses the WPF that ships with supported Windows versions, keeping the distribution small without a bundled runtime. The main window, in-window settings panel, preview toast, countdown card, and tray menu use the custom sunset retro theme; the selection overlay stays custom-drawn and positioned for tight control over capture behavior.
-- Body text uses the bundled Pixel Operator 8 font. Display headings use the bundled 04b_30 font, rendered aliased for crisp pixel edges.
+- The desktop is frozen **after** the countdown; the countdown is not part of the screenshot.
+- Region selection is limited to one monitor at a time in this version. Full-screen capture spans all monitors.
+- The clipboard auto-clear timer only clears the clipboard if the custom marker data is still present.
+- The app targets .NET Framework 4.8 to keep the download small without bundling a runtime.
+- The sunset theme is intentional: warm gradients, hard offset shadows, rounded frames, and pixel fonts.
 
-## Privacy
+<p align="center">
+  <img src="src/DisposableScreenshots/Assets/home-backdrop.png" alt="Sunset backdrop behind the dispoSS interface" width="420">
+</p>
 
-dispoSS does not contain networking code. Captures remain in memory and, if you choose, on the clipboard or in a file you explicitly save. Settings and a small diagnostic log are written locally; the log does not contain screenshot pixels or clipboard contents.
+## About the maker
 
-Read the full [privacy policy](PRIVACY.md).
+| | |
+| --- | --- |
+| <img src="src/DisposableScreenshots/Assets/farhan-sadik.png" alt="Farhan Sadik" width="140"> | **Farhan Sadik**<br><br>AI tech enthusiast and builder from Bogura, Bangladesh. Indie hacker, AI developer, and Civil Engineering student at RUET. I like turning small ideas into useful products — and shipping them with a little personality.<br><br>[GitHub](https://github.com/farhansadik007) · [X](https://x.com/SadikZisan) · [Facebook](https://www.facebook.com/FarhanSadikZisan/) · [Instagram](https://www.instagram.com/_sadik.farhan_/) |
 
-## Distribution
+If dispoSS is useful to you, you can support the project here:
 
-GitHub Releases is the primary direct-download channel. The Microsoft Store MSIX is in submission; the Store link will be added here after approval. A **winget** package is planned after the first stable release. The app itself does not check for updates; use the release page or the Store listing to install a newer version.
+https://www.supportkori.com/farhansadik007
 
 ## Known limitations
 
-- The GitHub installer is unsigned. Windows SmartScreen may warn when it is downloaded or launched on another machine. The Store MSIX is re-signed by Microsoft.
-- Region selection does not span multiple monitors.
+- The GitHub installer is unsigned, so SmartScreen may warn on another machine.
+- Region selection does not span multiple monitors yet.
 - No annotation, scrolling capture, OCR, or screenshot history.
 - No automatic updater.
-- Real mouse/keyboard interaction must be tested on an unlocked desktop. The app cannot receive local input while Windows is showing the lock screen.
 - `dotnet watch` restarts on XAML changes instead of doing true live XAML reload.
 
 ## Credits
@@ -252,9 +234,3 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for details.
 ## License
 
 MIT License. See [LICENSE](LICENSE). Third-party components and assets are covered by their own terms.
-
-## Support
-
-If dispoSS is useful to you, you can support the project here:
-
-https://www.supportkori.com/farhansadik007
