@@ -17,7 +17,7 @@ Last approved: 2026-10-23
 - Native Windows app built with C# / WPF on **.NET Framework 4.8**. Do not move to a bundled runtime, Electron, or a web UI.
 - Targets **Windows 10 1903+** and **Windows 11**.
 - Per-user install, **no administrator rights**.
-- Keep the app and installer **under 15 MB** combined. Current installer is about **3.88 MB**; the Store MSIX is about **2.18 MB**.
+- Keep the app and installer **under 15 MB** combined. Current installer is about **3.88 MB**; the Store MSIX is about **2.8 MB**.
 - Clipboard-first. Nothing is written to disk unless the user explicitly clicks **Save**.
 - No networking, no uploads, no history, no automatic screenshot files.
 
@@ -154,6 +154,11 @@ Behavior details:
 - Local packaged QA uses the test identity `PaperCraneLabs.DispoSSTest` because the reserved
   Store identity cannot be activated locally (`0x80270254`). Build/install the test package
   with `store\test-package.ps1`. Do not change the final manifest identity for local QA.
+- The MSIX ships `Square44x44Logo.targetsize-*_altform-unplated.png` and
+  `Square44x44Logo.targetsize-*_altform-lightunplated.png` variants so the taskbar, Alt+Tab,
+  and the lower-right corner of Start use the full logo. Without them Windows shrinks the logo
+  and draws it on a square plate using `BackgroundColor`. Keep the base `Square44x44Logo.png`
+  for the manifest reference.
 - The packaged Start with Windows setting uses the declared `uap5:StartupTask`
   (`TaskId=dispoSSStartup`) with `uap10:Parameters="--tray"` and the WinRT `StartupTask` API.
   The unpackaged Inno build keeps using the per-user registry Run entry.

@@ -28,12 +28,17 @@ dist\store\dispoSS_1.0.0.0_x64.msix
 Current size and hash (recompute after any rebuild):
 
 ```text
-2,178,051 bytes
-SHA-256 7879CA601C2F6452AB4B5C6FD5C46A6F08B01B5A1E3E377BA705C5FF1D28DEF8
+2,796,624 bytes
+SHA-256 315B7BB5562CDF6B365523D4346107F552141DA0189E6E10909C0416B304F75C
 ```
 
 The final package is intentionally **unsigned**. Microsoft re-signs Store submissions.
 Do not upload the test-signed package from `store/test-package.ps1`.
+
+The package includes unplated `Square44x44Logo.targetsize-*_altform-unplated.png` and
+`..._altform-lightunplated.png` assets. These keep the taskbar, Alt+Tab, and the lower-right
+corner of Start at full size; without them Windows shrinks the logo onto a square
+`BackgroundColor` plate.
 
 ## Build
 
