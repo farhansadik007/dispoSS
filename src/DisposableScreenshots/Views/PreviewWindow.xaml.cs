@@ -121,7 +121,7 @@ public partial class PreviewWindow : Window
             Filter = "PNG image (*.png)|*.png",
             DefaultExt = ".png",
             AddExtension = true,
-            FileName = $"screenshot-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png"
+            FileName = $"dispoSS_{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png"
         };
 
         if (dialog.ShowDialog(this) != true)

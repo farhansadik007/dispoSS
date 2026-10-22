@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using DisposableScreenshots.Models;
 
@@ -14,6 +15,8 @@ public partial class SettingsPanel : UserControl
     private static readonly int[] DefaultClipboardOptions = { 0, 30, 60, 120, 300 };
 
     private AppSettings? _draft;
+    private HotkeyDefinition _hotkeyDraft = HotkeyDefinition.Default;
+    private bool _capturingHotkey;
     private List<int> _delayOptions = new();
     private List<int> _previewOptions = new();
     private List<int> _clipboardOptions = new();
@@ -30,10 +33,16 @@ public partial class SettingsPanel : UserControl
 
     public event EventHandler? CancelRequested;
 
+    public event EventHandler? HotkeyCaptureStarted;
+
+    public event EventHandler? HotkeyCaptureFinished;
+
     public void Load(AppSettings settings, bool isDev)
     {
         _draft = settings.Clone();
-        HotkeyText.Text = HotkeyDefinition.Parse(settings.Hotkey).ToString().ToUpperInvariant();
+        _hotkeyDraft = HotkeyDefinition.Parse(settings.Hotkey);
+        _capturingHotkey = false;
+        UpdateHotkeyText();
 
         _delayOptions = BuildOptions(settings.DelaySeconds, DefaultDelayOptions);
         _previewOptions = BuildOptions(settings.PreviewSeconds, DefaultPreviewOptions);
@@ -155,6 +164,82 @@ public partial class SettingsPanel : UserControl
         }
     }
 
+    private void UpdateHotkeyText()
+    {
+        HotkeyText.Text = _capturingHotkey
+            ? "PRESS CTRL+KEY"
+            : _hotkeyDraft.ToString().ToUpperInvariant();
+    }
+
+    private void HotkeyButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_capturingHotkey)
+        {
+            return;
+        }
+
+        _capturingHotkey = true;
+        UpdateHotkeyText();
+        HotkeyButton.Focus();
+        HotkeyCaptureStarted?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void HotkeyButton_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (!_capturingHotkey)
+        {
+            return;
+        }
+
+        e.Handled = true;
+        var key = e.Key == Key.System ? e.SystemKey : e.Key;
+
+        if (key == Key.Escape)
+        {
+            CancelHotkeyCapture();
+            return;
+        }
+
+        if (key is Key.LeftCtrl or Key.RightCtrl
+            or Key.LeftAlt or Key.RightAlt
+            or Key.LeftShift or Key.RightShift
+            or Key.LWin or Key.RWin
+            or Key.None)
+        {
+            return;
+        }
+
+        var modifiers = Keyboard.Modifiers;
+        if (!modifiers.HasFlag(ModifierKeys.Control))
+        {
+            HotkeyText.Text = "NEEDS CTRL";
+            return;
+        }
+
+        _hotkeyDraft = new HotkeyDefinition(modifiers, key);
+        FinishHotkeyCapture();
+    }
+
+    private void HotkeyButton_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e) =>
+        CancelHotkeyCapture();
+
+    public void CancelHotkeyCapture()
+    {
+        if (!_capturingHotkey)
+        {
+            return;
+        }
+
+        FinishHotkeyCapture();
+    }
+
+    private void FinishHotkeyCapture()
+    {
+        _capturingHotkey = false;
+        UpdateHotkeyText();
+        HotkeyCaptureFinished?.Invoke(this, EventArgs.Empty);
+    }
+
     private void SaveButton_Click(object sender, RoutedEventArgs e)
     {
         if (_draft is null)
@@ -162,6 +247,7 @@ public partial class SettingsPanel : UserControl
             return;
         }
 
+        _draft.Hotkey = _hotkeyDraft.ToString();
         _draft.DelaySeconds = _delayOptions[_delayIndex];
         _draft.PreviewSeconds = _previewOptions[_previewIndex];
         _draft.ClipboardClearSeconds = _clipboardOptions[_clipboardIndex];

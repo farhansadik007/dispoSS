@@ -8,7 +8,7 @@ Read it before changing UI, motion, capture flow, or packaging.
 - If a request conflicts with something below, call it out and ask before changing it.
 - If an approved behavior changes, update this file in the same commit.
 
-Last approved: 2026-10-21
+Last approved: 2026-10-22
 
 ## Product constraints
 
@@ -70,6 +70,8 @@ Do not add opacity, scale, glow, or color-pulse hover effects to press-only butt
 - Closing the main window hides it to the tray; it does not exit the app.
 - The app is single-instance. Launching it again activates the existing window instead of starting a duplicate.
 - Settings opens as a panel that slides over the capture view inside the same window.
+- About opens as a panel that slides over the capture view inside the same window.
+- The About panel shows the supplied photo, name, bio, social links under the photo, and a `SUPPORT` link.
 - `SAVE` applies settings. `CANCEL` or `Esc` returns without saving.
 - Keep the sunset retro visual style: pixel font, navy/coral/gold palette, rounded frame, uppercase labels, hard offset shadows.
 - Keep the window title-bar buttons in the top-right: minimize, settings, close.
@@ -80,7 +82,7 @@ Do not add opacity, scale, glow, or color-pulse hover effects to press-only butt
 - The Pixel Operator 8 fonts are embedded at `src/DisposableScreenshots/Assets/Fonts/PixelOperator8-Regular.ttf`
   and `PixelOperator8-Bold.ttf`.
   The pack URI is `pack://application:,,,/Assets/Fonts/#Pixel Operator 8`.
-- Secondary text stays at **10 px or larger** so the pixel glyphs remain legible. Do not shrink it below 10 px.
+- Secondary text stays at **10 px or larger** so the pixel glyphs remain legible. Small helper captions directly under a control (settings explainers, `FIND ME`) may use **9 px**; do not shrink other secondary text below 10 px.
 - Display headings use **04b_30** (font family name `04b 30`):
   - main hero `dispoSS?`, rendered as a small-caps logo: `D` and `SS` at 42 px, `ISPO` at 30 px, coral `?`
   - settings `SETTINGS?`
@@ -101,6 +103,7 @@ The settings panel contains:
 - Preview visibility and timeout
 - Clipboard auto-clear interval
 - Start with Windows
+- Capture hotkey (`Ctrl` + one non-modifier key)
 
 Settings are saved per user at `%APPDATA%\dispoSS\settings.json`.
 Dev mode uses `%APPDATA%\dispoSS-dev\settings.json`. Existing settings from the old
@@ -117,11 +120,11 @@ Dev mode uses `%APPDATA%\dispoSS-dev\settings.json`. Existing settings from the 
 
 Behavior details:
 
-- Global hotkey is fixed to **Ctrl+Alt+S** in this build.
+- Global hotkey is configurable to **Ctrl + one non-modifier key**; default is **Ctrl+Alt+S**.
 - Region capture is limited to the monitor where selection starts.
 - Full-screen capture spans the entire virtual desktop.
 - `Esc` or right-click cancels selection.
-- Pressing the hotkey again during the countdown or selection cancels.
+- Pressing the configured hotkey again during the countdown or selection cancels.
 - The preview timeout pauses while the preview is hovered.
 - Clipboard auto-clear only clears the image if the app's marker is still on the clipboard.
 - The app is per-monitor DPI aware (`PerMonitorV2`).
@@ -145,14 +148,14 @@ Behavior details:
 - .NET Framework 4.8 and the framework-dependent, per-user packaging.
 - Clipboard-first behavior and the no-temp-files / no-history / no-network guarantees.
 - Tray behavior, single-instance behavior, and close-to-tray.
-- The fixed `Ctrl+Alt+S` hotkey.
+- The configurable Ctrl+key hotkey and its default `Ctrl+Alt+S`.
 - The settings fields listed above.
+- The About content: supplied photo, name, bio, social links under the photo, and the SupportKori link.
 
 ## Open items (not approved or implemented)
 
 These are possible future features. Do not implement them unless the user asks:
 
-- Rebindable global hotkey
 - Region selection across multiple monitors
 - Annotation, scrolling capture, OCR, or capture history
 - Code signing the installer

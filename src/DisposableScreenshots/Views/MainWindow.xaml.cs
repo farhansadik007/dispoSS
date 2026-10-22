@@ -15,6 +15,7 @@ public partial class MainWindow : Window
     private static readonly Duration TransitionDuration = new(TimeSpan.FromMilliseconds(180));
 
     private bool _settingsOpen;
+    private bool _aboutOpen;
 
     public MainWindow(AppSettings settings, bool isDev)
     {
@@ -35,13 +36,28 @@ public partial class MainWindow : Window
 
     public event EventHandler<AppSettings>? SettingsSaveRequested;
 
+    public event EventHandler? HotkeyCaptureStarted;
+
+    public event EventHandler? HotkeyCaptureFinished;
+
     public event EventHandler? ExitRequested;
+
+    public void UpdateHotkey(string hotkey) =>
+        HotkeyText.Text = HotkeyDefinition.Parse(hotkey).ToString();
 
     public void ShowSettings(AppSettings settings, bool isDev)
     {
         if (_settingsOpen)
         {
             return;
+        }
+
+        if (_aboutOpen)
+        {
+            _aboutOpen = false;
+            AboutView.Visibility = Visibility.Collapsed;
+            AboutTranslate.BeginAnimation(TranslateTransform.XProperty, null);
+            AboutTranslate.X = 0;
         }
 
         AppLog.Info("Opening in-window settings.");
@@ -70,6 +86,44 @@ public partial class MainWindow : Window
     private void SettingsButton_Click(object sender, RoutedEventArgs e) =>
         SettingsRequested?.Invoke(this, EventArgs.Empty);
 
+    private void AboutButton_Click(object sender, RoutedEventArgs e) => ShowAbout();
+
+    private void ShowAbout()
+    {
+        if (_aboutOpen || _settingsOpen)
+        {
+            return;
+        }
+
+        AppLog.Info("Opening in-window about.");
+        _aboutOpen = true;
+
+        AboutView.Visibility = Visibility.Visible;
+        AboutView.Opacity = 0;
+        AboutTranslate.BeginAnimation(TranslateTransform.XProperty, null);
+        AboutTranslate.X = Math.Max(1, ViewHost.ActualWidth);
+
+        CaptureTranslate.BeginAnimation(TranslateTransform.XProperty, null);
+        CaptureTranslate.X = 0;
+        CaptureView.Opacity = 1;
+        CaptureView.IsHitTestVisible = false;
+
+        AnimateViews();
+    }
+
+    private void AboutPanel_BackRequested(object sender, EventArgs e) => CloseAbout();
+
+    private void CloseAbout()
+    {
+        if (!_aboutOpen)
+        {
+            return;
+        }
+
+        _aboutOpen = false;
+        AnimateViews();
+    }
+
     private void HideButton_Click(object sender, RoutedEventArgs e) => Hide();
 
     private void ExitButton_Click(object sender, RoutedEventArgs e) =>
@@ -83,12 +137,28 @@ public partial class MainWindow : Window
 
     private void SettingsPanel_CancelRequested(object sender, EventArgs e) => CloseSettings();
 
+    private void SettingsPanel_HotkeyCaptureStarted(object sender, EventArgs e) =>
+        HotkeyCaptureStarted?.Invoke(this, EventArgs.Empty);
+
+    private void SettingsPanel_HotkeyCaptureFinished(object sender, EventArgs e) =>
+        HotkeyCaptureFinished?.Invoke(this, EventArgs.Empty);
+
     private void OnPreviewKeyDown(object sender, KeyEventArgs e)
     {
-        if (_settingsOpen && e.Key == Key.Escape)
+        if (e.Key != Key.Escape)
+        {
+            return;
+        }
+
+        if (_settingsOpen)
         {
             e.Handled = true;
             CloseSettings();
+        }
+        else if (_aboutOpen)
+        {
+            e.Handled = true;
+            CloseAbout();
         }
     }
 
@@ -99,6 +169,7 @@ public partial class MainWindow : Window
             return;
         }
 
+        SettingsPanel.CancelHotkeyCapture();
         _settingsOpen = false;
         AnimateViews();
     }
@@ -107,16 +178,25 @@ public partial class MainWindow : Window
     {
         var width = Math.Max(1, ViewHost.ActualWidth);
         var ease = new QuadraticEase { EasingMode = EasingMode.EaseOut };
-        var captureTarget = _settingsOpen ? -width : 0;
+        var overlayOpen = _settingsOpen || _aboutOpen;
+        var captureTarget = overlayOpen ? -width : 0;
         var settingsTarget = _settingsOpen ? 0 : width;
-        var captureOpacity = _settingsOpen ? 0 : 1;
+        var aboutTarget = _aboutOpen ? 0 : width;
+        var captureOpacity = overlayOpen ? 0 : 1;
         var settingsOpacity = _settingsOpen ? 1 : 0;
+        var aboutOpacity = _aboutOpen ? 1 : 0;
 
         var settingsAnimation = new DoubleAnimation(settingsTarget, TransitionDuration)
         {
             EasingFunction = ease
         };
         settingsAnimation.Completed += (_, _) => OnTransitionCompleted();
+
+        var aboutAnimation = new DoubleAnimation(aboutTarget, TransitionDuration)
+        {
+            EasingFunction = ease
+        };
+        aboutAnimation.Completed += (_, _) => OnTransitionCompleted();
 
         CaptureTranslate.BeginAnimation(
             TranslateTransform.XProperty,
@@ -128,6 +208,10 @@ public partial class MainWindow : Window
         SettingsView.BeginAnimation(
             OpacityProperty,
             new DoubleAnimation(settingsOpacity, TransitionDuration));
+        AboutTranslate.BeginAnimation(TranslateTransform.XProperty, aboutAnimation);
+        AboutView.BeginAnimation(
+            OpacityProperty,
+            new DoubleAnimation(aboutOpacity, TransitionDuration));
     }
 
     private void OnTransitionCompleted()
@@ -139,11 +223,24 @@ public partial class MainWindow : Window
             return;
         }
 
+        if (_aboutOpen)
+        {
+            AboutView.Visibility = Visibility.Visible;
+            AboutPanel.Focus();
+            return;
+        }
+
         SettingsView.Visibility = Visibility.Collapsed;
         SettingsView.BeginAnimation(OpacityProperty, null);
         SettingsView.Opacity = 0;
         SettingsTranslate.BeginAnimation(TranslateTransform.XProperty, null);
         SettingsTranslate.X = 0;
+
+        AboutView.Visibility = Visibility.Collapsed;
+        AboutView.BeginAnimation(OpacityProperty, null);
+        AboutView.Opacity = 0;
+        AboutTranslate.BeginAnimation(TranslateTransform.XProperty, null);
+        AboutTranslate.X = 0;
 
         CaptureView.BeginAnimation(OpacityProperty, null);
         CaptureView.Opacity = 1;

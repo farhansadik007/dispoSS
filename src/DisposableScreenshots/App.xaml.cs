@@ -271,6 +271,16 @@ public partial class App : Application
             BeginCapture(CaptureMode.Region);
         };
 
+        RegisterHotkey();
+    }
+
+    private bool RegisterHotkey()
+    {
+        if (_settings is null || _hotkey is null)
+        {
+            return false;
+        }
+
         var hotkey = HotkeyDefinition.Parse(_settings.Hotkey);
         if (!_hotkey.Register(hotkey))
         {
@@ -278,11 +288,11 @@ public partial class App : Application
             _tray?.ShowWarning(
                 "Hotkey unavailable",
                 $"{hotkey} is already used by another app. Use the tray menu to capture.");
+            return false;
         }
-        else
-        {
-            AppLog.Info($"Registered global hotkey {hotkey}.");
-        }
+
+        AppLog.Info($"Registered global hotkey {hotkey}.");
+        return true;
     }
 
     private async void BeginCapture(CaptureMode mode)
@@ -343,6 +353,8 @@ public partial class App : Application
             _mainWindow.CaptureFullScreenRequested += (_, _) => BeginCapture(CaptureMode.FullScreen);
             _mainWindow.SettingsRequested += (_, _) => ShowSettings();
             _mainWindow.SettingsSaveRequested += (_, draft) => ApplySettings(draft);
+            _mainWindow.HotkeyCaptureStarted += (_, _) => _hotkey?.Unregister();
+            _mainWindow.HotkeyCaptureFinished += (_, _) => RegisterHotkey();
             _mainWindow.ExitRequested += (_, _) => Shutdown();
             _mainWindow.Closed += (_, _) => _mainWindow = null;
         }
@@ -373,18 +385,34 @@ public partial class App : Application
         var previous = _settings.Clone();
         _settings.CopyFrom(draft);
         _settings.Normalize();
+
+        var requestedHotkey = HotkeyDefinition.Parse(_settings.Hotkey);
+        if (_hotkey is not null && !_hotkey.Register(requestedHotkey))
+        {
+            _settings.Hotkey = previous.Hotkey;
+            _hotkey.Register(HotkeyDefinition.Parse(previous.Hotkey));
+            _tray?.ShowWarning(
+                "Hotkey unavailable",
+                $"{requestedHotkey} is already used by another app. The previous hotkey is still active.");
+        }
+
         AppLog.Info($"Applying settings: path={_settingsService.SettingsPath}, delay={_settings.DelaySeconds}, preview={_settings.PreviewSeconds}, clipboard={_settings.ClipboardClearSeconds}.");
 
         try
         {
             _settingsService.Save(_settings);
             _tray?.UpdateDelay(_settings.DelaySeconds);
+            _tray?.UpdateHotkey(HotkeyDefinition.Parse(_settings.Hotkey));
+            _mainWindow?.UpdateHotkey(_settings.Hotkey);
         }
         catch (Exception exception)
         {
             AppLog.Error("Could not apply settings", exception);
             _settings.CopyFrom(previous);
+            _hotkey?.Register(HotkeyDefinition.Parse(_settings.Hotkey));
             _tray?.UpdateDelay(_settings.DelaySeconds);
+            _tray?.UpdateHotkey(HotkeyDefinition.Parse(_settings.Hotkey));
+            _mainWindow?.UpdateHotkey(_settings.Hotkey);
             _tray?.ShowWarning("Settings", "Could not save the new settings.");
         }
 

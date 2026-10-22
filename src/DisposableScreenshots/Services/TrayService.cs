@@ -11,6 +11,7 @@ public sealed class TrayService : IDisposable
 {
     private readonly TaskbarIcon _icon;
     private readonly Dictionary<int, MenuItem> _delayItems = new();
+    private MenuItem? _captureRegionItem;
     private int _selectedDelay;
 
     public TrayService(AppSettings settings)
@@ -47,6 +48,14 @@ public sealed class TrayService : IDisposable
         foreach (var pair in _delayItems)
         {
             pair.Value.IsChecked = pair.Key == seconds;
+        }
+    }
+
+    public void UpdateHotkey(HotkeyDefinition hotkey)
+    {
+        if (_captureRegionItem is not null)
+        {
+            _captureRegionItem.InputGestureText = hotkey.ToString();
         }
     }
 
@@ -96,6 +105,7 @@ public sealed class TrayService : IDisposable
             Header = "Capture region",
             InputGestureText = hotkey.ToString()
         };
+        _captureRegionItem = captureRegion;
         captureRegion.Click += (_, _) => CaptureRegionRequested?.Invoke(this, EventArgs.Empty);
         menu.Items.Add(captureRegion);
 

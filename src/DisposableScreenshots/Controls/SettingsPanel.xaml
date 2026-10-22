@@ -9,6 +9,46 @@
              Focusable="True"
              SnapsToDevicePixels="True"
              UseLayoutRounding="True">
+    <UserControl.Resources>
+        <Style x:Key="HotkeyFieldButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource CreamBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource NavyBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NavyBrush}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Padding" Value="7,3" />
+            <Setter Property="Focusable" Value="True" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="UseLayoutRounding" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="FieldFace"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="2"
+                                CornerRadius="7"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              TextElement.Foreground="{TemplateBinding Foreground}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="FieldFace"
+                                        Property="Background"
+                                        Value="{StaticResource SeafoamBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="FieldFace"
+                                        Property="BorderBrush"
+                                        Value="{StaticResource CoralBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid Margin="20,16,20,16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -60,17 +100,24 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="HOTKEY"
-                                   VerticalAlignment="Center" />
-                        <Border Grid.Column="1"
-                                Background="{StaticResource CreamBrush}"
-                                BorderBrush="{StaticResource NavyBrush}"
-                                BorderThickness="2"
-                                CornerRadius="7"
-                                Padding="7,3">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="HOTKEY" />
+                            <TextBlock Text="CLICK TO REBIND"
+                                       Margin="0,2,0,0"
+                                       FontSize="9"
+                                       Opacity="0.6" />
+                        </StackPanel>
+                        <Button x:Name="HotkeyButton"
+                                Grid.Column="1"
+                                Style="{StaticResource HotkeyFieldButton}"
+                                AutomationProperties.Name="Change capture hotkey"
+                                ToolTip="Click, then press Ctrl and another key. Esc cancels."
+                                Click="HotkeyButton_Click"
+                                PreviewKeyDown="HotkeyButton_PreviewKeyDown"
+                                LostKeyboardFocus="HotkeyButton_LostKeyboardFocus">
                             <TextBlock x:Name="HotkeyText"
                                        FontSize="10" />
-                        </Border>
+                        </Button>
                     </Grid>
 
                     <Grid Margin="0,8,0,0">
@@ -82,7 +129,7 @@
                             <TextBlock Text="COUNTDOWN" />
                             <TextBlock Text="BEFORE FREEZE"
                                        Margin="0,2,0,0"
-                                       FontSize="10"
+                                       FontSize="9"
                                        Opacity="0.6" />
                         </StackPanel>
                         <StackPanel Grid.Column="1"
@@ -156,7 +203,7 @@
                             <TextBlock Text="CLEAR CLIPBOARD" />
                             <TextBlock Text="IF STILL OURS"
                                        Margin="0,2,0,0"
-                                       FontSize="10"
+                                       FontSize="9"
                                        Opacity="0.6" />
                         </StackPanel>
                         <StackPanel Grid.Column="1"
@@ -205,7 +252,7 @@
                             <TextBlock Text="PREVIEW TIMEOUT" />
                             <TextBlock Text="HOVER PAUSES IT"
                                        Margin="0,2,0,0"
-                                       FontSize="10"
+                                       FontSize="9"
                                        Opacity="0.6" />
                         </StackPanel>
                         <StackPanel x:Name="PreviewStepper"
@@ -262,7 +309,7 @@
                     <TextBlock x:Name="DevNote"
                                Text="DISABLED IN DEV MODE."
                                Margin="0,6,0,0"
-                               FontSize="10"
+                               FontSize="9"
                                Opacity="0.6"
                                TextWrapping="Wrap"
                                Visibility="Collapsed" />
