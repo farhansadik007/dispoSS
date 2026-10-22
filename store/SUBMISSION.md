@@ -39,9 +39,9 @@ The package includes unplated `Square44x44Logo.targetsize-*_altform-unplated.png
 `..._altform-lightunplated.png` assets plus `resources.pri`. MakePri must index the package
 so Windows uses the unplated assets; without the PRI, Windows ignores them and shrinks the
 logo onto a square `BackgroundColor` plate. The square assets are generated from the
-full-bleed `store/listing/StoreListingLogo.png` artwork with a 15% rounded-corner mask, so the
-taskbar icon fills the full slot while keeping rounded edges. This logo treatment is approved
-as-is; do not regenerate or alter it.
+full-bleed `store/listing/StoreListingLogo-fullbleed.png` artwork with a 15% rounded-corner
+mask, so the taskbar icon fills the full slot while keeping rounded edges. This logo treatment
+is approved as-is; do not regenerate or alter it.
 
 ## Build
 
@@ -236,13 +236,15 @@ Upload these files from `store/listing/`:
 
 All screenshots are 1920×1080 PNG. The raw window captures (`_raw-*.png`) are local-only
 and are ignored by git. `compose.ps1` rebuilds the final screenshots when the UI changes.
+`StoreListingLogo-fullbleed.png` is the full-bleed source for the MSIX square assets; do not
+upload it to the Store listing.
 
-The 300×300 `StoreListingLogo.png` is deliberately flattened to a full square. The original
-app icon has transparent rounded corners; Partner Center renders those corners as black, which
-makes the logo look smaller and black-bordered. The flattened version extends the artwork's
-edge colors into the corners so the Store listing shows a full-bleed logo. The MSIX square
-images use the same full-bleed artwork with rounded transparent corners; Windows paints the
-declared `BackgroundColor="#0B1B2B"` behind them.
+The 300×300 `StoreListingLogo.png` is a downscaled copy of the packaged app icon
+(`store/Assets/Square310x310Logo.png`), so the Store listing uses the same rounded, transparent
+app artwork at the 300×300 size Partner Center expects. The package keeps
+`Square310x310Logo.png` at 310×310 because that is the manifest tile slot; Windows paints the
+declared `BackgroundColor="#0B1B2B"` behind the transparent corners. Do not upload the
+310×310 package asset directly as the Store listing logo.
 
 ## Submission checklist
 

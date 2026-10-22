@@ -42,14 +42,6 @@ function New-Background {
     $graphics.FillRectangle($brush, 0, 0, $canvasWidth, $canvasHeight)
     $brush.Dispose()
 
-    # Soft sunset glows.
-    $glow1 = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(38, 255, 112, 92))
-    $graphics.FillEllipse($glow1, 1260, -260, 900, 900)
-    $glow1.Dispose()
-    $glow2 = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(26, 245, 184, 78))
-    $graphics.FillEllipse($glow2, -300, 680, 900, 700)
-    $glow2.Dispose()
-
     # Subtle scanline texture.
     $scan = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(10, 255, 255, 255), 1)
     for ($y = 0; $y -lt $canvasHeight; $y += 8) {
@@ -85,7 +77,8 @@ function Add-WindowImage {
         [int]$InsetLeft = 10,
         [int]$InsetTop = 10,
         [int]$InsetRight = 10,
-        [int]$InsetBottom = 22
+        [int]$InsetBottom = 22,
+        [int]$SourceRadius = 0
     )
 
     $source = [System.Drawing.Image]::FromFile($Path)
@@ -99,11 +92,31 @@ function Add-WindowImage {
     $shadowPath.Dispose()
     $shadowBrush.Dispose()
 
+    $windowBitmap = $null
+    if ($SourceRadius -gt 0) {
+        $windowBitmap = New-Object System.Drawing.Bitmap($sourceRect.Width, $sourceRect.Height)
+        $windowGraphics = [System.Drawing.Graphics]::FromImage($windowBitmap)
+        $windowGraphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::None
+        $windowGraphics.Clear([System.Drawing.Color]::Transparent)
+        $sourceClip = Add-RoundedClip $windowGraphics (New-Object System.Drawing.Rectangle(0, 0, $sourceRect.Width, $sourceRect.Height)) $SourceRadius
+        $windowGraphics.SetClip($sourceClip)
+        $windowGraphics.DrawImage($source, (New-Object System.Drawing.Rectangle(0, 0, $sourceRect.Width, $sourceRect.Height)), $sourceRect, [System.Drawing.GraphicsUnit]::Pixel)
+        $windowGraphics.ResetClip()
+        $sourceClip.Dispose()
+        $windowGraphics.Dispose()
+    }
+
     $clip = Add-RoundedClip $Graphics (New-Object System.Drawing.Rectangle($X, $Y, $width, $height)) $Radius
     $Graphics.SetClip($clip)
     $Graphics.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::NearestNeighbor
     $Graphics.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::Half
-    $Graphics.DrawImage($source, (New-Object System.Drawing.Rectangle($X, $Y, $width, $height)), $sourceRect, [System.Drawing.GraphicsUnit]::Pixel)
+    if ($windowBitmap) {
+        $Graphics.DrawImage($windowBitmap, (New-Object System.Drawing.Rectangle($X, $Y, $width, $height)))
+        $windowBitmap.Dispose()
+    }
+    else {
+        $Graphics.DrawImage($source, (New-Object System.Drawing.Rectangle($X, $Y, $width, $height)), $sourceRect, [System.Drawing.GraphicsUnit]::Pixel)
+    }
     $Graphics.ResetClip()
     $clip.Dispose()
     $source.Dispose()
@@ -151,7 +164,7 @@ $aboutRaw = Join-Path $RawDirectory '_raw-about.png'
 $canvas = New-Background
 $bitmap = $canvas[0]; $graphics = $canvas[1]
 Write-Caption $graphics 'CLIPBOARD-FIRST SCREENSHOTS.' 'NOTHING IS SAVED UNLESS YOU SAY SO.' 100 24 44 19
-Add-WindowImage $graphics $mainRaw 340 110 2 38
+Add-WindowImage $graphics $mainRaw 340 110 2 40 -InsetLeft 0 -InsetTop 0 -InsetRight 14 -InsetBottom 14 -SourceRadius 26
 Save-Canvas $bitmap 'Screenshot-1-Main.png'
 $graphics.Dispose()
 
@@ -159,7 +172,7 @@ $graphics.Dispose()
 $canvas = New-Background
 $bitmap = $canvas[0]; $graphics = $canvas[1]
 Write-Caption $graphics 'MAKE IT YOURS.' 'HOTKEY, COUNTDOWN, PREVIEW, STARTUP.' 100 24 44 19
-Add-WindowImage $graphics $settingsRaw 340 110 2 38
+Add-WindowImage $graphics $settingsRaw 340 110 2 40 -InsetLeft 0 -InsetTop 0 -InsetRight 14 -InsetBottom 14 -SourceRadius 26
 Save-Canvas $bitmap 'Screenshot-2-Settings.png'
 $graphics.Dispose()
 
@@ -180,7 +193,7 @@ foreach ($bullet in $bullets) {
 $bulletFont.Dispose()
 $bulletBrush.Dispose()
 $coralBrush.Dispose()
-Add-WindowImage $graphics $previewRaw 1000 140 2 38
+Add-WindowImage $graphics $previewRaw 1000 140 2 38 -InsetLeft 16 -InsetTop 16 -InsetRight 16 -InsetBottom 16
 Save-Canvas $bitmap 'Screenshot-3-Preview.png'
 $graphics.Dispose()
 
@@ -188,7 +201,7 @@ $graphics.Dispose()
 $canvas = New-Background
 $bitmap = $canvas[0]; $graphics = $canvas[1]
 Write-Caption $graphics 'THE PERSON BEHIND THE PIXELS.' 'BUILT IN PUBLIC. SHIPPED WITH CARE.' 100 24 44 19
-Add-WindowImage $graphics $aboutRaw 340 110 2 38
+Add-WindowImage $graphics $aboutRaw 340 110 2 40 -InsetLeft 0 -InsetTop 0 -InsetRight 14 -InsetBottom 14 -SourceRadius 26
 Save-Canvas $bitmap 'Screenshot-4-About.png'
 $graphics.Dispose()
 
